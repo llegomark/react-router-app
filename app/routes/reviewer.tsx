@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, data } from 'react-router';
 import type { Route } from './+types/reviewer';
 
 export const meta: Route.MetaFunction = () => {
@@ -8,28 +8,44 @@ export const meta: Route.MetaFunction = () => {
   ];
 };
 
+// Define proper type interfaces
+interface Category {
+  id: number;
+  name: string;
+  description: string;
+  icon: string;
+}
+
+interface LoaderData {
+  categories: Category[];
+  needsMigration: boolean;
+}
+
 export async function loader({ context }: Route.LoaderArgs) {
   try {
     // Check if the table exists first by trying a simpler query
     try {
       const categories = await context.db.query.categories.findMany();
-      return { categories, needsMigration: false };
+      return { categories, needsMigration: false } as LoaderData;
     } catch (error: unknown) {
       // If there's an error about the table not existing, we need migration
       if (typeof error === 'object' && error !== null && 'toString' in error &&
         error.toString().includes("no such table")) {
-        return { categories: [], needsMigration: true };
+        return { categories: [], needsMigration: true } as LoaderData;
       }
-      throw error; // Re-throw any other errors
+      
+      // Re-throw any other errors to be handled by the catch block below
+      throw error;
     }
   } catch (error) {
     console.error("Failed to load categories:", error);
-    return { categories: [], needsMigration: true };
+    // Use consistent error handling pattern by throwing a response
+    throw data({ message: "Failed to load categories" }, { status: 500 });
   }
 }
 
 export default function Reviewer({ loaderData }: Route.ComponentProps) {
-  const { categories, needsMigration } = loaderData as { categories: any[], needsMigration: boolean };
+  const { categories, needsMigration } = loaderData as LoaderData;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8 md:py-12">
@@ -72,7 +88,7 @@ export default function Reviewer({ loaderData }: Route.ComponentProps) {
           </div>
         ) : (
           <div className="grid gap-4">
-            {categories.map((category: {id: number; name: string; description: string; icon: string}) => (
+            {categories.map((category: Category) => (
               <Link 
                 key={category.id} 
                 to={`/category/${category.id}/1`}

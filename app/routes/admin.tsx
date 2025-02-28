@@ -7,9 +7,50 @@ import type { Route } from './+types/admin';
 // Define page size for questions
 const QUESTIONS_PER_PAGE = 50;
 
+// Define proper type interfaces for loader data
+interface Category {
+  id: number;
+  name: string;
+  description: string;
+  icon: string;
+}
+
+interface Question {
+  id: number;
+  categoryId: number;
+  question: string;
+  options: string;
+  correctAnswer: number;
+  explanation: string;
+  referenceTitle: string;
+  referenceUrl: string;
+  referenceCopyright: string;
+}
+
+interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  mobileNumber: string | null;
+  message: string;
+  status: string;
+  createdAt: string;
+}
+
+interface LoaderData {
+  categories: Category[];
+  contactMessages: ContactMessage[];
+  allQuestions: Question[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+  };
+  error?: string;
+}
+
 export const meta: Route.MetaFunction = () => {
   return [
-    { title: "Quiz Admin Panel" },
+    { title: "NQESH Reviewer Admin Panel" },
     { name: "description", content: "Manage quiz categories and questions" },
   ];
 };
@@ -45,11 +86,24 @@ export async function loader({ context, request }: Route.LoaderArgs) {
         currentPage: page,
         totalPages: Math.ceil(totalQuestionsCount.length / QUESTIONS_PER_PAGE),
       }
-    };
+    } as LoaderData;
   } catch (error) {
     console.error("Failed to load data:", error);
-    return { categories: [], contactMessages: [], allQuestions: [], pagination: { currentPage: 1, totalPages: 1 }, error: "Failed to load data" };
+    // Instead of returning an object with error, throw a Response for consistent error handling
+    throw data({ 
+      message: "Failed to load admin data" 
+    }, { 
+      status: 500 
+    });
   }
+}
+
+interface ActionData {
+  success: boolean;
+  message: string;
+  category?: Category;
+  messageId?: number;
+  newStatus?: string;
 }
 
 export async function action({ context, request }: Route.ActionArgs) {
@@ -74,13 +128,22 @@ export async function action({ context, request }: Route.ActionArgs) {
       const icon = formData.get('icon') as string;
 
       if (!id || !name || !description || !icon) {
-        return data({ success: false, message: "All fields are required" }, { status: 400 });
+        return data({ 
+          success: false, 
+          message: "All fields are required" 
+        } as ActionData, { 
+          status: 400 
+        });
       }
 
       const newCategory = { id, name, description, icon }; // Create new category object
       await context.db.insert(schema.categories).values(newCategory);
 
-      return data({ success: true, message: "Category added successfully", category: newCategory }); // Return new category
+      return data({ 
+        success: true, 
+        message: "Category added successfully", 
+        category: newCategory 
+      } as ActionData);
     }
 
     // Add a new question
@@ -102,14 +165,21 @@ export async function action({ context, request }: Route.ActionArgs) {
         !option1 || !option2 || !option3 || !option4 ||
         (correctAnswer < 0 || correctAnswer > 3) ||
         !explanation || !referenceTitle || !referenceUrl || !referenceCopyright) {
-        return data({ success: false, message: "All fields are required and must be valid" }, { status: 400 });
+        return data({ 
+          success: false, 
+          message: "All fields are required and must be valid" 
+        } as ActionData, { 
+          status: 400 
+        });
       }
 
       if (!isValidUrl(referenceUrl)) {
         return data({
           success: false,
           message: "Reference URL must be a valid URL format"
-        }, { status: 400 });
+        } as ActionData, { 
+          status: 400 
+        });
       }
 
       const options = JSON.stringify([option1, option2, option3, option4]);
@@ -126,7 +196,10 @@ export async function action({ context, request }: Route.ActionArgs) {
         referenceCopyright
       });
 
-      return data({ success: true, message: "Question added successfully" });
+      return data({ 
+        success: true, 
+        message: "Question added successfully" 
+      } as ActionData);
     }
 
     // Toggle message status
@@ -136,7 +209,12 @@ export async function action({ context, request }: Route.ActionArgs) {
       const newStatus = currentStatus === 'unread' ? 'read' : 'unread';
 
       if (!messageId) {
-        return data({ success: false, message: "Invalid message ID" }, { status: 400 });
+        return data({ 
+          success: false, 
+          message: "Invalid message ID" 
+        } as ActionData, { 
+          status: 400 
+        });
       }
 
       await context.db.update(schema.contactSubmissions)
@@ -148,14 +226,18 @@ export async function action({ context, request }: Route.ActionArgs) {
         message: `Message marked as ${newStatus}`,
         messageId,
         newStatus
-      });
+      } as ActionData);
     }
 
-    return data({ success: false, message: "Unknown action" }, { status: 400 });
+    return data({ 
+      success: false, 
+      message: "Unknown action" 
+    } as ActionData, { 
+      status: 400 
+    });
   } catch (error: any) {
     console.error("Action error:", error);
-    return data({
-      success: false,
+    throw data({
       message: `Error: ${error?.message || "Unknown error"}`
     }, { status: 500 });
   }
@@ -167,12 +249,7 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
     contactMessages: initialMessages,
     allQuestions: initialQuestions,
     pagination: initialPagination,
-  } = loaderData as {
-    categories: any[],
-    contactMessages: any[],
-    allQuestions: any[],
-    pagination: { currentPage: number, totalPages: number }
-  };
+  } = loaderData as LoaderData;
 
   const [categories, setCategories] = useState(initialCategories || []);
   const [messages, setMessages] = useState(initialMessages || []);
@@ -218,7 +295,7 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8">
       <div className="container mx-auto px-4 max-w-2xl">
         <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 mb-8">
-          <h1 className="text-3xl font-bold p-6 text-center text-gray-900 dark:text-white">Quiz Admin Panel</h1>
+          <h1 className="text-3xl font-bold p-6 text-center text-gray-900 dark:text-white">NQESH Reviewer Admin Panel</h1>
 
           {/* Simple, clean tabs design */}
           <div className="border-t border-gray-200 dark:border-gray-800">
@@ -264,11 +341,11 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
         </div>
 
         {actionData && (
-          <div className={`p-4 mb-6 rounded-lg ${actionData.success
+          <div className={`p-4 mb-6 rounded-lg ${(actionData as ActionData).success
             ? 'bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-900 text-green-800 dark:text-green-300'
             : 'bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-900 text-red-800 dark:text-red-300'
             }`}>
-            {(actionData as any).message}
+            {(actionData as ActionData).message}
           </div>
         )}
 
@@ -338,7 +415,7 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
                   </p>
                 ) : (
                   <div className="grid grid-cols-1 gap-4">
-                    {categories.map((category: any) => (
+                    {categories.map((category: Category) => (
                       <div key={category.id} className="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
                         <div className="flex items-center mb-3">
                           <span className="text-4xl mr-4">{category.icon}</span>
@@ -379,7 +456,7 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
                     required
                   >
                     <option value="">Select a category</option>
-                    {categories.map((category: any) => (
+                    {categories.map((category: Category) => (
                       <option key={category.id} value={category.id}>{category.name}</option>
                     ))}
                   </select>
@@ -512,9 +589,9 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
                   </p>
                 ) : (
                   <div className="space-y-4">
-                    {questions.map((question: any) => {
+                    {questions.map((question: Question) => {
                       // Find category for this question from the categories array
-                      const category = categories.find((cat: any) => cat.id === question.categoryId);
+                      const category = categories.find((cat: Category) => cat.id === question.categoryId);
                       // Parse options from JSON string
                       const options = JSON.parse(question.options);
 
@@ -601,7 +678,7 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
                 </p>
               ) : (
                 <div className="grid grid-cols-1 gap-4">
-                  {messages && messages.map((message: any) => (
+                  {messages && messages.map((message: ContactMessage) => (
                     <div
                       key={message.id}
                       className={`bg-gray-50 dark:bg-gray-800 p-5 rounded-lg ${message.status === 'unread'

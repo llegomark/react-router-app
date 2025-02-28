@@ -3,8 +3,8 @@ import type { Route } from './+types/category';
 
 export const meta: Route.MetaFunction = () => {
   return [
-    { title: "Quiz" },
-    { name: "description", content: "Take the quiz" },
+    { title: "NQESH Reviewer" },
+    { name: "description", content: "Take the NQESH Reviewer" },
   ];
 };
 

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate, redirect } from 'react-router';
+import { useNavigate, redirect, data } from 'react-router';
 import { useQuizStore } from '~/store/quizStore';
 import type { Route } from './+types/question';
 
@@ -17,6 +17,33 @@ export const meta: Route.MetaFunction = ({ data }) => {
   ];
 };
 
+interface Category {
+  id: number;
+  name: string;
+  description: string;
+  icon: string;
+}
+
+interface Question {
+  id: number;
+  categoryId: number;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+  referenceTitle: string;
+  referenceUrl: string;
+  referenceCopyright: string;
+}
+
+interface LoaderData {
+  category: Category;
+  question: Question;
+  currentQuestionNumber: number;
+  totalQuestions: number;
+  nextQuestionId: number | null;
+}
+
 export async function loader({ params, context }: Route.LoaderArgs) {
   const categoryId = Number(params.categoryId);
   const questionId = Number(params.questionId);
@@ -31,7 +58,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   });
 
   if (!category) {
-    throw redirect('/');
+    throw data({ message: "Category not found" }, { status: 404 });
   }
 
   // Get all questions for this category
@@ -40,7 +67,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   });
 
   if (allQuestions.length === 0) {
-    throw redirect('/');
+    throw data({ message: "No questions found for this category" }, { status: 404 });
   }
 
   // Find the current question
@@ -51,62 +78,14 @@ export async function loader({ params, context }: Route.LoaderArgs) {
     throw redirect(`/category/${categoryId}/${allQuestions[0].id}`);
   }
 
-  // Create shuffled question list from session storage if it doesn't exist
-  let shuffledQuestions;
-
-  // Check if we're in the browser where sessionStorage is available
-  const isClient = typeof window !== 'undefined';
-
-  if (isClient && window.sessionStorage) {
-    try {
-      const storedQuestionsJson = window.sessionStorage.getItem(`shuffled_questions_${categoryId}`);
-
-      if (!storedQuestionsJson) {
-        // Shuffle the questions using a Fisher-Yates algorithm
-        shuffledQuestions = [...allQuestions];
-        for (let i = shuffledQuestions.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [shuffledQuestions[i], shuffledQuestions[j]] = [shuffledQuestions[j], shuffledQuestions[i]];
-        }
-
-        // Store shuffled questions in session storage
-        try {
-          window.sessionStorage.setItem(`shuffled_questions_${categoryId}`, JSON.stringify(shuffledQuestions.map((q: any) => q.id)));
-        } catch (e) {
-          console.error("Failed to store shuffled questions in session storage:", e);
-        }
-      } else {
-        // Use the stored shuffled order
-        const shuffledIds = JSON.parse(storedQuestionsJson);
-        shuffledQuestions = shuffledIds.map((id: number) => allQuestions.find((q: any) => q.id === id)).filter(Boolean);
-
-        // If we somehow have fewer questions than before, reset the shuffle
-        if (shuffledQuestions.length !== allQuestions.length) {
-          shuffledQuestions = [...allQuestions];
-          try {
-            window.sessionStorage.setItem(`shuffled_questions_${categoryId}`, JSON.stringify(shuffledQuestions.map((q: any) => q.id)));
-          } catch (e) {
-            console.error("Failed to update shuffled questions in session storage:", e);
-          }
-        }
-      }
-    } catch (error) {
-      console.error("Failed to access sessionStorage:", error);
-      shuffledQuestions = [...allQuestions];
-    }
-  } else {
-    // On server-side, use the default order
-    shuffledQuestions = [...allQuestions];
-  }
-
-  // Find the current index in the shuffled array
-  const currentIndex = shuffledQuestions.findIndex((q: any) => q.id === question.id);
+  // Find the current index in the original array for numbering
+  const currentIndex = allQuestions.findIndex((q: any) => q.id === question.id);
   const currentQuestionNumber = currentIndex + 1;
-  const totalQuestions = shuffledQuestions.length;
+  const totalQuestions = allQuestions.length;
 
-  // Determine next question from the shuffled array
+  // Determine next question from the ordered array
   const nextQuestion = currentIndex < totalQuestions - 1
-    ? shuffledQuestions[currentIndex + 1]
+    ? allQuestions[currentIndex + 1]
     : null;
 
   // Parse options which are stored as JSON string
@@ -120,8 +99,8 @@ export async function loader({ params, context }: Route.LoaderArgs) {
     },
     currentQuestionNumber,
     totalQuestions,
-    nextQuestionId: nextQuestion?.id,
-  };
+    nextQuestionId: nextQuestion?.id
+  } as LoaderData;
 }
 
 export default function Question({ loaderData }: Route.ComponentProps) {
@@ -131,7 +110,7 @@ export default function Question({ loaderData }: Route.ComponentProps) {
     currentQuestionNumber,
     totalQuestions,
     nextQuestionId
-  } = loaderData as any;
+  } = loaderData as LoaderData;
 
   const navigate = useNavigate();
 
@@ -144,7 +123,6 @@ export default function Question({ loaderData }: Route.ComponentProps) {
     resetTimer,
     selectedAnswers,
     resetQuiz,
-    resetShuffledQuestions,
     endQuiz,
     setCurrentCategory,
     currentCategoryId
@@ -212,26 +190,21 @@ export default function Question({ loaderData }: Route.ComponentProps) {
     // Then completely reset all quiz state
     resetQuiz();
 
-    // Also clear the shuffled questions for this category
-    resetShuffledQuestions(category.id);
-
     // Clear any other relevant session storage items
-    if (typeof window !== 'undefined' && window.sessionStorage) {
-      try {
-        // Optional: Clear any other session storage related to this quiz
-        // This ensures a completely clean slate when the user returns
-        const keysToRemove = [];
-        for (let i = 0; i < window.sessionStorage.length; i++) {
-          const key = window.sessionStorage.key(i);
-          if (key && key.includes(`${category.id}`)) {
-            keysToRemove.push(key);
-          }
+    try {
+      // Clear any other session storage related to this quiz
+      // This ensures a completely clean slate when the user returns
+      const keysToRemove = [];
+      for (let i = 0; i < window.sessionStorage.length; i++) {
+        const key = window.sessionStorage.key(i);
+        if (key && key.includes(`${category.id}`)) {
+          keysToRemove.push(key);
         }
-
-        keysToRemove.forEach(key => window.sessionStorage.removeItem(key));
-      } catch (e) {
-        console.error("Failed to clean up session storage:", e);
       }
+
+      keysToRemove.forEach(key => window.sessionStorage.removeItem(key));
+    } catch (e) {
+      console.error("Failed to clean up session storage:", e);
     }
 
     // Navigate back to home
@@ -272,15 +245,14 @@ export default function Question({ loaderData }: Route.ComponentProps) {
                   key={index}
                   onClick={() => handleAnswerSelect(index)}
                   disabled={hasAnswered || timeRemaining === 0}
-                  className={`w-full text-left p-4 rounded-lg border transition-colors cursor-pointer ${
-                    hasAnswered
+                  className={`w-full text-left p-4 rounded-lg border transition-colors cursor-pointer ${hasAnswered
                       ? index === question.correctAnswer
                         ? 'bg-green-50 dark:bg-green-950 border-green-500 text-green-900 dark:text-green-300'
                         : index === selectedAnswer
                           ? 'bg-red-50 dark:bg-red-950 border-red-500 text-red-900 dark:text-red-300'
                           : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300'
                       : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-                  }`}
+                    }`}
                 >
                   {option}
                 </button>
@@ -294,11 +266,11 @@ export default function Question({ loaderData }: Route.ComponentProps) {
                 <div className="text-sm mt-4 border-t border-blue-200 dark:border-blue-900 pt-4">
                   <p className="font-medium text-gray-700 dark:text-gray-300">Reference:</p>
                   <p className="text-gray-600 dark:text-gray-400">
-                    {question.referenceTitle} - 
-                    <a 
-                      href={question.referenceUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
+                    {question.referenceTitle} -
+                    <a
+                      href={question.referenceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-blue-600 dark:text-blue-400 hover:underline ml-1"
                     >
                       {question.referenceUrl}
