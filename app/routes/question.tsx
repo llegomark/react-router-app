@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, redirect } from 'react-router';
-import * as schema from '~/database/schema';
 import { useQuizStore } from '~/store/quizStore';
+import type { Route } from './+types/question';
 
-export function meta({ data }: any) {
+export const meta: Route.MetaFunction = ({ data }) => {
   if (!data?.category) {
     return [
       { title: "Quiz - Error" },
@@ -15,9 +15,9 @@ export function meta({ data }: any) {
     { title: `${data.category.name} - Question ${data.currentQuestionNumber}` },
     { name: "description", content: "Answer the quiz question" },
   ];
-}
+};
 
-export async function loader({ params, context }: any) {
+export async function loader({ params, context }: Route.LoaderArgs) {
   const categoryId = Number(params.categoryId);
   const questionId = Number(params.questionId);
   
@@ -124,14 +124,14 @@ export async function loader({ params, context }: any) {
   };
 }
 
-export default function Question({ loaderData }: any) {
+export default function Question({ loaderData }: Route.ComponentProps) {
   const { 
     category, 
     question, 
     currentQuestionNumber, 
     totalQuestions, 
     nextQuestionId 
-  } = loaderData;
+  } = loaderData as any;
   
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -145,7 +145,7 @@ export default function Question({ loaderData }: any) {
     resetTimer, 
     selectedAnswers,
     resetQuiz,
-    resetShuffledQuestions,
+    resetShuffledQuestions, 
     endQuiz,
     setCurrentCategory,
     currentCategoryId
@@ -162,7 +162,7 @@ export default function Question({ loaderData }: any) {
     }
   }, [category.id, currentCategoryId, setCurrentCategory]);
 
-  // Handle timer in a separate effect
+  // Handle timer in a separate effect - FIXED
   useEffect(() => {
     // Reset and start timer when question changes (unless already answered)
     const alreadyAnswered = selectedAnswers[question.id] !== undefined;

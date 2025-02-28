@@ -1,11 +1,12 @@
 import { Link } from 'react-router';
+import type { Route } from './+types/not-found';
 
-export function meta() {
+export const meta: Route.MetaFunction = () => {
   return [
     { title: "404 - Page Not Found" },
     { name: "description", content: "The page you requested could not be found." },
   ];
-}
+};
 
 export default function NotFound() {
   return (

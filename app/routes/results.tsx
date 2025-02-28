@@ -1,7 +1,8 @@
 import { useNavigate, redirect } from 'react-router';
 import { useQuizStore } from '~/store/quizStore';
+import type { Route } from './+types/results';
 
-export function meta({ data }: any) {
+export const meta: Route.MetaFunction = ({ data }) => {
   if (!data?.category) {
     return [
       { title: "Quiz - Error" },
@@ -13,9 +14,9 @@ export function meta({ data }: any) {
     { title: `${data.category.name} - Results` },
     { name: "description", content: "Your quiz results" },
   ];
-}
+};
 
-export async function loader({ params, context }: any) {
+export async function loader({ params, context }: Route.LoaderArgs) {
   const categoryId = Number(params.categoryId);
   
   if (isNaN(categoryId)) {
@@ -42,8 +43,8 @@ export async function loader({ params, context }: any) {
   };
 }
 
-export default function Results({ loaderData }: any) {
-  const { category, questions } = loaderData;
+export default function Results({ loaderData }: Route.ComponentProps) {
+  const { category, questions } = loaderData as any;
   const navigate = useNavigate();
   const { selectedAnswers, resetQuiz, resetShuffledQuestions } = useQuizStore();
   

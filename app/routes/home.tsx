@@ -1,14 +1,14 @@
 import { Link } from 'react-router';
-import * as schema from '~/database/schema';
+import type { Route } from './+types/home';
 
-export function meta() {
+export const meta: Route.MetaFunction = () => {
   return [
     { title: "Quiz App - Categories" },
     { name: "description", content: "Select a quiz category to start" },
   ];
-}
+};
 
-export async function loader({ context }: any) {
+export async function loader({ context }: Route.LoaderArgs) {
   try {
     // Check if the table exists first by trying a simpler query
     try {
@@ -16,8 +16,8 @@ export async function loader({ context }: any) {
       return { categories, needsMigration: false };
     } catch (error: unknown) {
       // If there's an error about the table not existing, we need migration
-      if (typeof error === 'object' && error !== null && 'toString' in error && 
-          error.toString().includes("no such table")) {
+      if (typeof error === 'object' && error !== null && 'toString' in error &&
+        error.toString().includes("no such table")) {
         return { categories: [], needsMigration: true };
       }
       throw error; // Re-throw any other errors
@@ -28,9 +28,9 @@ export async function loader({ context }: any) {
   }
 }
 
-export default function Home({ loaderData }: any) {
-  const { categories, needsMigration } = loaderData;
-  
+export default function Home({ loaderData }: Route.ComponentProps) {
+  const { categories, needsMigration } = loaderData as { categories: any[], needsMigration: boolean };
+
   return (
     <div className="container mx-auto p-4 max-w-2xl">
       <h1 className="text-3xl font-bold mb-8 text-center">Quiz Categories</h1>

@@ -1,14 +1,15 @@
 import { data } from 'react-router';
 import * as schema from '~/database/schema';
+import type { Route } from './+types/seed';
 
-export function meta() {
+export const meta: Route.MetaFunction = () => {
   return [
     { title: "Seed Database" },
     { name: "description", content: "Seed the database with quiz data" },
   ];
-}
+};
 
-export async function action({ context }: any) {
+export async function action({ context }: Route.ActionArgs) {
   // Sample quiz data based on the example
   const categories = [
     {
@@ -147,7 +148,7 @@ export async function action({ context }: any) {
   }
 }
 
-export default function Seed({ actionData }: any) {
+export default function Seed({ actionData }: Route.ComponentProps) {
   return (
     <div className="container mx-auto p-4 max-w-lg">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
@@ -155,13 +156,13 @@ export default function Seed({ actionData }: any) {
         
         {actionData && (
           <div className={`p-4 mb-6 rounded-lg ${
-            actionData.success 
+            (actionData as any).success 
               ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
               : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
           }`}>
-            {actionData.message}
+            {(actionData as any).message}
             
-            {actionData.needsMigration && (
+            {(actionData as any).needsMigration && (
               <div className="mt-4 p-4 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
                 <p className="font-medium mb-2">Please run this command in your terminal:</p>
                 <div className="bg-gray-800 text-white p-3 rounded-md text-left font-mono overflow-x-auto">
