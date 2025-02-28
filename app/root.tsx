@@ -8,6 +8,8 @@ import {
   useNavigation,
 } from "react-router";
 
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import type { Route } from "./+types/root";
 import "./app.css";
 
@@ -30,10 +32,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="color-scheme" content="light dark" />
         <Meta />
         <Links />
       </head>
-      <body className="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+      <body className="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 flex flex-col min-h-screen">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -56,7 +59,13 @@ export default function App() {
           </div>
         </div>
       )}
-      <Outlet />
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-grow">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }
@@ -78,18 +87,22 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12">
-      <div className="container mx-auto px-4 max-w-2xl">
-        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
-          <h1 className="text-2xl font-bold text-center mb-4 text-gray-900 dark:text-white">{message}</h1>
-          <p className="text-center mb-6 text-gray-700 dark:text-gray-300">{details}</p>
-          {stack && (
-            <pre className="w-full p-4 overflow-x-auto bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 text-sm">
-              <code>{stack}</code>
-            </pre>
-          )}
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-grow bg-gray-50 dark:bg-gray-950 py-12">
+        <div className="container mx-auto px-4 max-w-2xl">
+          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
+            <h1 className="text-2xl font-bold text-center mb-4 text-gray-900 dark:text-white">{message}</h1>
+            <p className="text-center mb-6 text-gray-700 dark:text-gray-300">{details}</p>
+            {stack && (
+              <pre className="w-full p-4 overflow-x-auto bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 text-sm">
+                <code>{stack}</code>
+              </pre>
+            )}
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+      <Footer />
+    </div>
   );
 }
