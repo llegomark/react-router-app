@@ -12,3 +12,6 @@ binding = "DB"
 database_name = "nqesh-react-router"
 database_id = "0fbd5d77-cd09-40b1-9d2c-9a56e7cb6ca4"
 migrations_dir = "drizzle"
+
+[placement]
+mode = "smart"
