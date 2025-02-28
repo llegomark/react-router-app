@@ -33,6 +33,21 @@ export default function Header() {
                 </Link>
               </li>
               <li>
+                <Link to="/reviewer" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                  Reviewer
+                </Link>
+              </li>
+              <li>
+                <Link to="/pricing" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link to="/faq" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                  FAQ
+                </Link>
+              </li>
+              <li>
                 <Link to="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   About
                 </Link>
@@ -92,6 +107,33 @@ export default function Header() {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Home
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/reviewer" 
+                  className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Reviewer
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/pricing" 
+                  className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/faq" 
+                  className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  FAQ
                 </Link>
               </li>
               <li>

@@ -15,6 +15,21 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/reviewer" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                  Reviewer
+                </Link>
+              </li>
+              <li>
+                <Link to="/pricing" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link to="/faq" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                  FAQ
+                </Link>
+              </li>
+              <li>
                 <Link to="/about" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   About Us
                 </Link>
@@ -22,6 +37,16 @@ export default function Footer() {
               <li>
                 <Link to="/contact" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   Contact
+                </Link>
+              </li>
+              <li>
+                <Link to="/payment-methods" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                  Payment Methods
+                </Link>
+              </li>
+              <li>
+                <Link to="/refund-policy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                  Refund Policy
                 </Link>
               </li>
               <li>
@@ -37,7 +62,7 @@ export default function Footer() {
             </ul>
           </nav>
           <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-            © {currentYear} NQESH Reviewer. All rights reserved.
+            © {currentYear} Eduventure Web Development Services. All rights reserved.
           </p>
         </div>
       </div>
