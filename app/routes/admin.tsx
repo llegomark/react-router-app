@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { data } from 'react-router';
+import { useState, useEffect } from 'react';
+import { data, useFetcher } from 'react-router';
 import * as schema from '~/database/schema';
 import type { Route } from './+types/admin';
 
-export function meta() {
+export const meta: Route.MetaFunction = () => {
   return [
     { title: "Quiz Admin Panel" },
     { name: "description", content: "Manage quiz categories and questions" },
   ];
-}
+};
 
 export async function loader({ context }: Route.LoaderArgs) {
   try {
@@ -45,11 +45,10 @@ export async function action({ context, request }: Route.ActionArgs) {
         return data({ success: false, message: "All fields are required" }, { status: 400 });
       }
 
-      await context.db.insert(schema.categories).values({
-        id, name, description, icon
-      });
+      const newCategory = { id, name, description, icon }; // Create new category object
+      await context.db.insert(schema.categories).values(newCategory);
 
-      return data({ success: true, message: "Category added successfully" });
+      return data({ success: true, message: "Category added successfully", category: newCategory }); // Return new category
     }
 
     // Add a new question
@@ -109,8 +108,20 @@ export async function action({ context, request }: Route.ActionArgs) {
 }
 
 export default function Admin({ loaderData, actionData }: Route.ComponentProps) {
-  const { categories } = loaderData as { categories: any[] }; // Type loaderData
+  const { categories: initialCategories } = loaderData as { categories: any[] };
+  const [categories, setCategories] = useState(initialCategories || []); // Categories state for optimistic UI
   const [activeTab, setActiveTab] = useState<'categories' | 'questions'>('categories');
+  const addCategoryFetcher = useFetcher(); // Fetcher for add category form
+  const addQuestionFetcher = useFetcher(); // Fetcher for add question form
+
+
+  // Optimistically update categories on successful category add
+  useEffect(() => {
+    if (addCategoryFetcher.data && addCategoryFetcher.data.success && addCategoryFetcher.data.category) {
+      setCategories(prevCategories => [...prevCategories, addCategoryFetcher.data.category]);
+    }
+  }, [addCategoryFetcher.data]);
+
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
@@ -145,7 +156,7 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
       {activeTab === 'categories' && (
         <div>
           <h2 className="text-xl font-bold mb-4">Add New Category</h2>
-          <form method="post" className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-6">
+          <addCategoryFetcher.Form method="post" className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-6"> {/* Use fetcher form */}
             <input type="hidden" name="action" value="add-category" />
             <div className="grid grid-cols-1 gap-4 mb-4">
               <div>
@@ -192,11 +203,12 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
 
             <button
               type="submit"
+              disabled={addCategoryFetcher.state !== 'idle'}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer"
             >
-              Add Category
+              {addCategoryFetcher.state !== 'idle' ? 'Adding Category...' : 'Add Category'} {/* Pending UI for button */}
             </button>
-          </form>
+          </addCategoryFetcher.Form>
 
           <h2 className="text-xl font-bold mb-4">Existing Categories</h2>
           {categories.length === 0 ? (
@@ -221,7 +233,7 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
       {activeTab === 'questions' && (
         <div>
           <h2 className="text-xl font-bold mb-4">Add New Question</h2>
-          <form method="post" className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-6">
+          <addQuestionFetcher.Form method="post" className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-6"> {/* Use fetcher form */}
             <input type="hidden" name="action" value="add-question" />
             <div className="grid grid-cols-1 gap-4 mb-4">
               <div>
@@ -355,11 +367,12 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
 
             <button
               type="submit"
+              disabled={addQuestionFetcher.state !== 'idle'}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer"
             >
-              Add Question
+              {addQuestionFetcher.state !== 'idle' ? 'Adding Question...' : 'Add Question'} {/* Pending UI for button */}
             </button>
-          </form>
+          </addQuestionFetcher.Form>
         </div>
       )}
     </div>

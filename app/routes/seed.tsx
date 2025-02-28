@@ -1,4 +1,4 @@
-import { data } from 'react-router';
+import { data, useFetcher } from 'react-router';
 import * as schema from '~/database/schema';
 import type { Route } from './+types/seed';
 
@@ -32,7 +32,7 @@ export async function action({ context }: Route.ActionArgs) {
       icon: "📚",
     }
   ];
-  
+
   const questions = [
     {
       id: 1553214,
@@ -101,7 +101,7 @@ export async function action({ context }: Route.ActionArgs) {
       referenceCopyright: "Mark Anthony Llego",
     }
   ];
-  
+
   // Clear existing data
   try {
     try {
@@ -109,8 +109,8 @@ export async function action({ context }: Route.ActionArgs) {
       await context.db.delete(schema.questions);
       await context.db.delete(schema.categories);
     } catch (error: unknown) {
-      if (typeof error === 'object' && error !== null && 'toString' in error && 
-          !error.toString().includes("no such table")) {
+      if (typeof error === 'object' && error !== null && 'toString' in error &&
+        !error.toString().includes("no such table")) {
         throw error; // Re-throw if it's not a "no such table" error
       }
       // Otherwise, tables don't exist yet, which is fine for seeding
@@ -120,28 +120,28 @@ export async function action({ context }: Route.ActionArgs) {
         needsMigration: true
       }, { status: 400 });
     }
-    
+
     // If we get here, tables exist and we can seed
     // Insert categories
     for (const category of categories) {
       await context.db.insert(schema.categories).values(category);
     }
-    
+
     // Insert questions
     for (const question of questions) {
       await context.db.insert(schema.questions).values(question);
     }
-    
-    return data({ 
-      success: true, 
-      message: "Database seeded successfully! Quiz data is ready to use." 
+
+    return data({
+      success: true,
+      message: "Database seeded successfully! Quiz data is ready to use."
     });
   } catch (error) {
     console.error("Failed to seed database:", error);
     return data(
-      { 
-        success: false, 
-        message: "Failed to seed database. See server logs for details." 
+      {
+        success: false,
+        message: "Failed to seed database. See server logs for details."
       },
       { status: 500 }
     );
@@ -149,19 +149,20 @@ export async function action({ context }: Route.ActionArgs) {
 }
 
 export default function Seed({ actionData }: Route.ComponentProps) {
+  const seedFetcher = useFetcher(); // Fetcher for seed form
+
   return (
     <div className="container mx-auto p-4 max-w-lg">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
         <h1 className="text-2xl font-bold mb-6 text-center">Seed Quiz Database</h1>
-        
+
         {actionData && (
-          <div className={`p-4 mb-6 rounded-lg ${
-            (actionData as any).success 
-              ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
-              : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-          }`}>
+          <div className={`p-4 mb-6 rounded-lg ${actionData.success
+            ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
+            : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
+            }`}>
             {(actionData as any).message}
-            
+
             {(actionData as any).needsMigration && (
               <div className="mt-4 p-4 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
                 <p className="font-medium mb-2">Please run this command in your terminal:</p>
@@ -173,21 +174,22 @@ export default function Seed({ actionData }: Route.ComponentProps) {
             )}
           </div>
         )}
-        
+
         <div className="mb-8">
           <p className="mb-4">This page will populate the database with sample quiz data including categories and questions.</p>
           <p className="mb-4 font-medium">Warning: This will delete any existing quiz data!</p>
         </div>
-        
-        <form method="post" className="text-center">
+
+        <seedFetcher.Form method="post" className="text-center"> {/* Use fetcher form */}
           <button
             type="submit"
+            disabled={seedFetcher.state !== 'idle'}
             className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium"
           >
-            Seed Database
+            {seedFetcher.state !== 'idle' ? 'Seeding Database...' : 'Seed Database'} {/* Pending UI for button */}
           </button>
-        </form>
-        
+        </seedFetcher.Form>
+
         <div className="mt-8 border-t pt-6">
           <h2 className="text-lg font-medium mb-3">Having Database Issues?</h2>
           <p className="mb-3">If you're seeing database errors, please try the following steps:</p>

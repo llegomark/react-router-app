@@ -5,6 +5,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useNavigation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -42,7 +43,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const navigation = useNavigation();
+
+  const isGlobalLoading = navigation.state === 'loading' || navigation.state === 'submitting';
+
+  return (
+    <>
+      {isGlobalLoading && (
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-100 dark:bg-gray-900 opacity-50 z-50 flex justify-center items-center">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      )}
+      <Outlet />
+    </>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
