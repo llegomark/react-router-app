@@ -1,12 +1,5 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-// Original schema
-export const guestBook = sqliteTable("guestBook", {
-  id: integer().primaryKey({ autoIncrement: true }),
-  name: text().notNull(),
-  email: text().notNull().unique(),
-});
-
 // Quiz schema
 export const categories = sqliteTable("categories", {
   id: integer("id").primaryKey(),

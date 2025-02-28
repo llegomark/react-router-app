@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate, redirect } from 'react-router';
 import * as schema from '~/database/schema';
 import { useQuizStore } from '~/store/quizStore';
@@ -48,6 +49,10 @@ export default function Results({ loaderData }: any) {
   const navigate = useNavigate();
   const { selectedAnswers, resetQuiz, resetShuffledQuestions } = useQuizStore();
   
+  // Navigation state
+  const [isNavigating, setIsNavigating] = useState(false);
+  const navigationTarget = useRef<string | null>(null);
+  
   // Calculate score
   const totalQuestions = questions.length;
   const answeredQuestions = Object.keys(selectedAnswers).length;
@@ -57,23 +62,35 @@ export default function Results({ loaderData }: any) {
   
   const score = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
   
-  const handleTryAgain = () => {
-    resetQuiz();
-    // Reset the shuffled questions to get a new order
-    resetShuffledQuestions(category.id);
-    
-    // Navigate to the first question
-    if (questions.length > 0) {
-      navigate(`/category/${category.id}/${questions[0].id}`);
-    } else {
-      navigate(`/category/${category.id}/1`);
+  // Use effect to handle navigation after state updates
+  useEffect(() => {
+    if (isNavigating && navigationTarget.current) {
+      const target = navigationTarget.current;
+      
+      // Reset quiz state
+      resetQuiz();
+      resetShuffledQuestions(category.id);
+      
+      // Navigate using the stored target
+      navigate(target);
     }
+  }, [isNavigating, navigate, resetQuiz, resetShuffledQuestions, category.id]);
+  
+  // Handle try again action
+  const handleTryAgain = () => {
+    // Set target for first question
+    const firstQuestionUrl = questions.length > 0 
+      ? `/category/${category.id}/${questions[0].id}` 
+      : `/category/${category.id}/1`;
+    
+    navigationTarget.current = firstQuestionUrl;
+    setIsNavigating(true);
   };
   
+  // Handle back to home action
   const handleBackToHome = () => {
-    resetQuiz();
-    resetShuffledQuestions(category.id);
-    navigate('/');
+    navigationTarget.current = '/';
+    setIsNavigating(true);
   };
   
   // Get performance message based on score
@@ -84,6 +101,20 @@ export default function Results({ loaderData }: any) {
     if (score >= 40) return "Keep practicing! You're making progress.";
     return "Don't give up! Try again to improve your score.";
   };
+  
+  // Hide warning message completely if navigating
+  if (isNavigating) {
+    return (
+      <div className="container mx-auto p-4 max-w-lg">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+          <h1 className="text-2xl font-bold text-center mb-6">{category.name} - Quiz Results</h1>
+          <div className="text-center">
+            <div className="text-5xl font-bold mb-2">{score}%</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="container mx-auto p-4 max-w-lg">
