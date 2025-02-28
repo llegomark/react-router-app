@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, redirect } from 'react-router';
 import * as schema from '~/database/schema';
 import { useQuizStore } from '~/store/quizStore';
@@ -134,6 +134,7 @@ export default function Question({ loaderData }: any) {
   } = loaderData;
   
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   
   const { 
     timeRemaining, 
@@ -142,7 +143,9 @@ export default function Question({ loaderData }: any) {
     startTimer, 
     decrementTimer, 
     resetTimer, 
-    selectedAnswers, 
+    selectedAnswers,
+    resetQuiz,
+    resetShuffledQuestions,
     endQuiz,
     setCurrentCategory,
     currentCategoryId
@@ -161,12 +164,12 @@ export default function Question({ loaderData }: any) {
 
   // Handle timer in a separate effect
   useEffect(() => {
-    // Only reset/start timer if not already answered
+    // Reset and start timer when question changes (unless already answered)
     const alreadyAnswered = selectedAnswers[question.id] !== undefined;
-    if (!alreadyAnswered && timeRemaining === 120) {
-      startTimer();
+    if (!alreadyAnswered) {
+      resetTimer(); // This resets to 120 seconds and activates the timer
     }
-  }, [question.id, startTimer, selectedAnswers, timeRemaining]);
+  }, [question.id, resetTimer, selectedAnswers]);
   
   // Setup timer effect
   useEffect(() => {
@@ -195,15 +198,51 @@ export default function Question({ loaderData }: any) {
   
   const handleNextQuestion = () => {
     if (nextQuestionId) {
-      navigate(`/category/${category.id}/${nextQuestionId}`);
+      setIsLoading(true); // Show loading state
+      resetTimer(); // Reset timer before navigation
+      
+      // Add a slight delay to ensure state updates before navigation
+      setTimeout(() => {
+        navigate(`/category/${category.id}/${nextQuestionId}`);
+        // Loading state will be cleared when new component mounts
+      }, 300);
     } else {
       // No more questions, go to results
       navigate(`/category/${category.id}/results`);
     }
   };
   
+  // FIXED: handleEndQuiz now completely resets the quiz state and shuffled questions
   const handleEndQuiz = () => {
+    // First end the quiz (sets isQuizEnded to true and stops timer)
     endQuiz();
+    
+    // Then completely reset all quiz state
+    resetQuiz();
+    
+    // Also clear the shuffled questions for this category
+    resetShuffledQuestions(category.id);
+    
+    // Clear any other relevant session storage items
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      try {
+        // Optional: Clear any other session storage related to this quiz
+        // This ensures a completely clean slate when the user returns
+        const keysToRemove = [];
+        for (let i = 0; i < window.sessionStorage.length; i++) {
+          const key = window.sessionStorage.key(i);
+          if (key && key.includes(`${category.id}`)) {
+            keysToRemove.push(key);
+          }
+        }
+        
+        keysToRemove.forEach(key => window.sessionStorage.removeItem(key));
+      } catch (e) {
+        console.error("Failed to clean up session storage:", e);
+      }
+    }
+    
+    // Navigate back to home
     navigate('/');
   };
   
@@ -214,82 +253,96 @@ export default function Question({ loaderData }: any) {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
   
+  // Clear loading state when component fully mounts with new question
+  useEffect(() => {
+    setIsLoading(false);
+  }, [question.id]);
+  
   return (
     <div className="container mx-auto p-4 max-w-2xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-center mb-4">{category.name}</h1>
-        <div className="flex justify-between items-center mb-2">
-          <div className="font-medium">QID: {question.id}</div>
-          <div className={`font-bold ${timeRemaining < 30 ? 'text-red-500' : ''}`}>
-            Timer: {formatTime(timeRemaining)}
-          </div>
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center min-h-[60vh]">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-lg font-medium">Loading next question...</p>
         </div>
-        <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
-          <div 
-            className="bg-blue-500 h-full transition-all duration-1000 ease-linear"
-            style={{ width: `${(timeRemaining / 120) * 100}%` }}
-          ></div>
-        </div>
-      </div>
-      
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-4">
-        <h2 className="text-lg font-semibold mb-4">{question.question}</h2>
-        
-        <div className="space-y-3 mb-4">
-          {question.options.map((option: string, index: number) => (
-            <button
-              key={index}
-              onClick={() => handleAnswerSelect(index)}
-              disabled={hasAnswered || timeRemaining === 0}
-              className={`w-full text-left p-3 rounded-lg border transition-colors cursor-pointer ${
-                hasAnswered
-                  ? index === question.correctAnswer
-                    ? 'bg-green-100 dark:bg-green-900 border-green-500'
-                    : index === selectedAnswer
-                    ? 'bg-red-100 dark:bg-red-900 border-red-500'
-                    : 'bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
-                  : 'bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600'
-              }`}
-            >
-              {option}
-            </button>
-          ))}
-        </div>
-        
-        {(hasAnswered || timeRemaining === 0) && (
-          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
-            <h3 className="font-semibold mb-2">Explanation:</h3>
-            <p className="mb-4">{question.explanation}</p>
-            <div className="text-sm mt-4">
-              <p className="font-medium">Reference:</p>
-              <p>{question.referenceTitle} - <a href={question.referenceUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">{question.referenceUrl}</a></p>
-              <p className="mt-1">© {question.referenceCopyright}</p>
+      ) : (
+        <>
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-center mb-4">{category.name}</h1>
+            <div className="flex justify-between items-center mb-2">
+              <div className="font-medium">QID: {question.id}</div>
+              <div className={`font-bold ${timeRemaining < 30 ? 'text-red-500' : ''}`}>
+                Timer: {formatTime(timeRemaining)}
+              </div>
+            </div>
+            <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+              <div 
+                className="bg-blue-500 h-full transition-all duration-1000 ease-linear"
+                style={{ width: `${(timeRemaining / 120) * 100}%` }}
+              ></div>
             </div>
           </div>
-        )}
-      </div>
-      
-      <div className="flex justify-between items-center">
-        <button
-          onClick={handleEndQuiz}
-          className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg cursor-pointer"
-        >
-          End Quiz
-        </button>
-        
-        <div className="text-sm font-medium">
-          Question {currentQuestionNumber} of {totalQuestions}
-        </div>
-        
-        {(hasAnswered || timeRemaining === 0) && (
-          <button
-            onClick={handleNextQuestion}
-            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg cursor-pointer"
-          >
-            {nextQuestionId ? 'Next Question' : 'See Results'}
-          </button>
-        )}
-      </div>
+          
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-4">
+            <h2 className="text-lg font-semibold mb-4">{question.question}</h2>
+            
+            <div className="space-y-3 mb-4">
+              {question.options.map((option: string, index: number) => (
+                <button
+                  key={index}
+                  onClick={() => handleAnswerSelect(index)}
+                  disabled={hasAnswered || timeRemaining === 0}
+                  className={`w-full text-left p-3 rounded-lg border transition-colors cursor-pointer ${
+                    hasAnswered
+                      ? index === question.correctAnswer
+                        ? 'bg-green-100 dark:bg-green-900 border-green-500'
+                        : index === selectedAnswer
+                        ? 'bg-red-100 dark:bg-red-900 border-red-500'
+                        : 'bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600'
+                      : 'bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600'
+                  }`}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+            
+            {(hasAnswered || timeRemaining === 0) && (
+              <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                <h3 className="font-semibold mb-2">Explanation:</h3>
+                <p className="mb-4">{question.explanation}</p>
+                <div className="text-sm mt-4">
+                  <p className="font-medium">Reference:</p>
+                  <p>{question.referenceTitle} - <a href={question.referenceUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">{question.referenceUrl}</a></p>
+                  <p className="mt-1">© {question.referenceCopyright}</p>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <div className="flex justify-between items-center">
+            <button
+              onClick={handleEndQuiz}
+              className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg cursor-pointer"
+            >
+              End Quiz
+            </button>
+            
+            <div className="text-sm font-medium">
+              Question {currentQuestionNumber} of {totalQuestions}
+            </div>
+            
+            {(hasAnswered || timeRemaining === 0) && (
+              <button
+                onClick={handleNextQuestion}
+                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg cursor-pointer"
+              >
+                {nextQuestionId ? 'Next Question' : 'See Results'}
+              </button>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }
