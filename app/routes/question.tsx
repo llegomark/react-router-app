@@ -55,39 +55,44 @@ export async function loader({ params, context }: any) {
   let shuffledQuestions;
   
   // Check if we're in the browser where sessionStorage is available
-  const isClient = typeof window !== 'undefined' && window.sessionStorage;
+  const isClient = typeof window !== 'undefined';
   
-  if (isClient) {
-    const storedQuestionsJson = window.sessionStorage.getItem(`shuffled_questions_${categoryId}`);
-    
-    if (!storedQuestionsJson) {
-      // Shuffle the questions using a Fisher-Yates algorithm
-      shuffledQuestions = [...allQuestions];
-      for (let i = shuffledQuestions.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledQuestions[i], shuffledQuestions[j]] = [shuffledQuestions[j], shuffledQuestions[i]];
-      }
+  if (isClient && window.sessionStorage) {
+    try {
+      const storedQuestionsJson = window.sessionStorage.getItem(`shuffled_questions_${categoryId}`);
       
-      // Store shuffled questions in session storage
-      try {
-        window.sessionStorage.setItem(`shuffled_questions_${categoryId}`, JSON.stringify(shuffledQuestions.map((q: any) => q.id)));
-      } catch (e) {
-        console.error("Failed to store shuffled questions in session storage:", e);
-      }
-    } else {
-      // Use the stored shuffled order
-      const shuffledIds = JSON.parse(storedQuestionsJson);
-      shuffledQuestions = shuffledIds.map((id: number) => allQuestions.find((q: any) => q.id === id)).filter(Boolean);
-      
-      // If we somehow have fewer questions than before, reset the shuffle
-      if (shuffledQuestions.length !== allQuestions.length) {
+      if (!storedQuestionsJson) {
+        // Shuffle the questions using a Fisher-Yates algorithm
         shuffledQuestions = [...allQuestions];
+        for (let i = shuffledQuestions.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffledQuestions[i], shuffledQuestions[j]] = [shuffledQuestions[j], shuffledQuestions[i]];
+        }
+        
+        // Store shuffled questions in session storage
         try {
           window.sessionStorage.setItem(`shuffled_questions_${categoryId}`, JSON.stringify(shuffledQuestions.map((q: any) => q.id)));
         } catch (e) {
-          console.error("Failed to update shuffled questions in session storage:", e);
+          console.error("Failed to store shuffled questions in session storage:", e);
+        }
+      } else {
+        // Use the stored shuffled order
+        const shuffledIds = JSON.parse(storedQuestionsJson);
+        shuffledQuestions = shuffledIds.map((id: number) => allQuestions.find((q: any) => q.id === id)).filter(Boolean);
+        
+        // If we somehow have fewer questions than before, reset the shuffle
+        if (shuffledQuestions.length !== allQuestions.length) {
+          shuffledQuestions = [...allQuestions];
+          try {
+            window.sessionStorage.setItem(`shuffled_questions_${categoryId}`, JSON.stringify(shuffledQuestions.map((q: any) => q.id)));
+          } catch (e) {
+            console.error("Failed to update shuffled questions in session storage:", e);
+          }
         }
       }
+    } catch (error) {
+      console.error("Failed to access sessionStorage:", error);
+      shuffledQuestions = [...allQuestions];
     }
   } else {
     // On server-side, use the default order
@@ -139,23 +144,32 @@ export default function Question({ loaderData }: any) {
     resetTimer, 
     selectedAnswers, 
     endQuiz,
-    setCurrentCategory
+    setCurrentCategory,
+    currentCategoryId
   } = useQuizStore();
   
   const selectedAnswer = selectedAnswers[question.id] ?? null;
   const hasAnswered = selectedAnswer !== null;
   
-  // Set current category when component mounts
+  // Set current category when component mounts or category changes
   useEffect(() => {
-    setCurrentCategory(category.id);
-  }, [category.id, setCurrentCategory]);
+    // Only set the category once when it changes
+    if (currentCategoryId !== category.id) {
+      setCurrentCategory(category.id);
+    }
+  }, [category.id, currentCategoryId, setCurrentCategory]);
+
+  // Handle timer in a separate effect
+  useEffect(() => {
+    // Only reset/start timer if not already answered
+    const alreadyAnswered = selectedAnswers[question.id] !== undefined;
+    if (!alreadyAnswered && timeRemaining === 120) {
+      startTimer();
+    }
+  }, [question.id, startTimer, selectedAnswers, timeRemaining]);
   
   // Setup timer effect
   useEffect(() => {
-    if (!hasAnswered) {
-      resetTimer();
-    }
-    
     const interval = setInterval(() => {
       if (isTimerActive && !hasAnswered) {
         decrementTimer();
@@ -163,7 +177,7 @@ export default function Question({ loaderData }: any) {
     }, 1000);
     
     return () => clearInterval(interval);
-  }, [question.id, resetTimer, isTimerActive, decrementTimer, hasAnswered]);
+  }, [isTimerActive, decrementTimer, hasAnswered]);
   
   // Handle timer expiration
   useEffect(() => {

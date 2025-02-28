@@ -1,4 +1,4 @@
-import { redirect, data } from 'react-router';
+import { data } from 'react-router';
 import * as schema from '~/database/schema';
 
 export function meta() {
@@ -105,75 +105,36 @@ export async function action({ context }: any) {
   try {
     try {
       // Try to delete existing data if tables exist
-      try {
-        // Delete existing questions first (due to foreign key constraints)
-        await context.db.delete(schema.questions);
-        await context.db.delete(schema.categories);
-      } catch (error: unknown) {
-        if (typeof error === 'object' && error !== null && 'toString' in error && 
-            !error.toString().includes("no such table")) {
-          throw error; // Re-throw if it's not a "no such table" error
-        }
-        // Otherwise, tables don't exist yet, which is fine for seeding
-      }
-      
-      // Create tables if they don't exist
-      try {
-        // Create categories table if it doesn't exist
-        await context.db.run(`
-          CREATE TABLE IF NOT EXISTS categories (
-            id integer PRIMARY KEY NOT NULL,
-            name text NOT NULL,
-            description text NOT NULL,
-            icon text NOT NULL
-          )
-        `);
-        
-        // Create questions table if it doesn't exist
-        await context.db.run(`
-          CREATE TABLE IF NOT EXISTS questions (
-            id integer PRIMARY KEY NOT NULL,
-            category_id integer NOT NULL,
-            question text NOT NULL,
-            options text NOT NULL,
-            correct_answer integer NOT NULL,
-            explanation text NOT NULL,
-            reference_title text NOT NULL,
-            reference_url text NOT NULL,
-            reference_copyright text NOT NULL,
-            FOREIGN KEY (category_id) REFERENCES categories (id)
-          )
-        `);
-      } catch (error) {
-        console.error("Error creating tables:", error);
-        throw error;
-      }
-      
-      // Insert categories
-      for (const category of categories) {
-        await context.db.insert(schema.categories).values(category);
-      }
-      
-      // Insert questions
-      for (const question of questions) {
-        await context.db.insert(schema.questions).values(question);
-      }
-      
-      return data({ 
-        success: true, 
-        message: "Database seeded successfully! Quiz data is ready to use." 
-      });
+      await context.db.delete(schema.questions);
+      await context.db.delete(schema.categories);
     } catch (error: unknown) {
-      if (typeof error === 'object' && error !== null && 'toString' in error &&
-          error.toString().includes("no such table")) {
-        return data({
-          success: false,
-          message: "Database migration required. Please run 'npm run db:migrate' first.",
-          needsMigration: true
-        }, { status: 400 });
+      if (typeof error === 'object' && error !== null && 'toString' in error && 
+          !error.toString().includes("no such table")) {
+        throw error; // Re-throw if it's not a "no such table" error
       }
-      throw error;
+      // Otherwise, tables don't exist yet, which is fine for seeding
+      return data({
+        success: false,
+        message: "Database migration required. Please run 'npm run db:migrate' first.",
+        needsMigration: true
+      }, { status: 400 });
     }
+    
+    // If we get here, tables exist and we can seed
+    // Insert categories
+    for (const category of categories) {
+      await context.db.insert(schema.categories).values(category);
+    }
+    
+    // Insert questions
+    for (const question of questions) {
+      await context.db.insert(schema.questions).values(question);
+    }
+    
+    return data({ 
+      success: true, 
+      message: "Database seeded successfully! Quiz data is ready to use." 
+    });
   } catch (error) {
     console.error("Failed to seed database:", error);
     return data(

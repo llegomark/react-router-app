@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { redirect, data } from 'react-router';
+import { data } from 'react-router';
 import * as schema from '~/database/schema';
 
 export function meta() {
@@ -22,6 +22,15 @@ export async function loader({ context }: any) {
 export async function action({ context, request }: any) {
   const formData = await request.formData();
   const action = formData.get('action');
+
+  const isValidUrl = (url: string) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
 
   try {
     // Add a new category
@@ -62,6 +71,13 @@ export async function action({ context, request }: any) {
           (correctAnswer < 0 || correctAnswer > 3) || 
           !explanation || !referenceTitle || !referenceUrl || !referenceCopyright) {
         return data({ success: false, message: "All fields are required and must be valid" }, { status: 400 });
+      }
+      
+      if (!isValidUrl(referenceUrl)) {
+        return data({ 
+          success: false, 
+          message: "Reference URL must be a valid URL format" 
+        }, { status: 400 });
       }
       
       const options = JSON.stringify([option1, option2, option3, option4]);
