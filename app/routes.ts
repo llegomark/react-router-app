@@ -9,6 +9,7 @@ export default [
   route("seed", "routes/seed.tsx"),
   route("admin", "routes/admin.tsx"),
   route("about", "routes/about.tsx"),
+  route("contact", "routes/contact.tsx"),
   route("privacy", "routes/privacy.tsx"),
   route("terms", "routes/terms.tsx"),
   route("*", "routes/not-found.tsx")

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { data, useFetcher } from 'react-router';
+import { sql } from 'drizzle-orm';
 import * as schema from '~/database/schema';
 import type { Route } from './+types/admin';
 
@@ -13,10 +14,14 @@ export const meta: Route.MetaFunction = () => {
 export async function loader({ context }: Route.LoaderArgs) {
   try {
     const categories = await context.db.query.categories.findMany();
-    return { categories };
+    // Use sql`` template literal for orderBy to fix the type error
+    const contactMessages = await context.db.select().from(schema.contactSubmissions)
+      .orderBy(sql`created_at DESC`);
+    
+    return { categories, contactMessages };
   } catch (error) {
-    console.error("Failed to load categories:", error);
-    return { categories: [], error: "Failed to load categories" };
+    console.error("Failed to load data:", error);
+    return { categories: [], contactMessages: [], error: "Failed to load data" };
   }
 }
 
@@ -108,9 +113,12 @@ export async function action({ context, request }: Route.ActionArgs) {
 }
 
 export default function Admin({ loaderData, actionData }: Route.ComponentProps) {
-  const { categories: initialCategories } = loaderData as { categories: any[] };
+  const { categories: initialCategories, contactMessages: initialMessages } = loaderData as { 
+    categories: any[], 
+    contactMessages: any[] 
+  };
   const [categories, setCategories] = useState(initialCategories || []); // Categories state for optimistic UI
-  const [activeTab, setActiveTab] = useState<'categories' | 'questions'>('categories');
+  const [activeTab, setActiveTab] = useState<'categories' | 'questions' | 'messages'>('categories');
   const addCategoryFetcher = useFetcher(); // Fetcher for add category form
   const addQuestionFetcher = useFetcher(); // Fetcher for add question form
 
@@ -152,6 +160,14 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
               onClick={() => setActiveTab('questions')}
             >
               Questions
+            </button>
+            <button
+              className={`py-3 px-5 font-medium transition-colors ${activeTab === 'messages' 
+                ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400' 
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'}`}
+              onClick={() => setActiveTab('messages')}
+            >
+              Messages
             </button>
           </div>
         </div>
@@ -378,6 +394,55 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
                 {addQuestionFetcher.state !== 'idle' ? 'Adding Question...' : 'Add Question'}
               </button>
             </addQuestionFetcher.Form>
+          </div>
+        )}
+
+        {activeTab === 'messages' && (
+          <div>
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Contact Messages</h2>
+            {initialMessages && initialMessages.length === 0 ? (
+              <p className="text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 text-center">
+                No contact messages yet.
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 gap-4">
+                {initialMessages && initialMessages.map((message: any) => (
+                  <div 
+                    key={message.id} 
+                    className={`bg-white dark:bg-gray-900 p-5 rounded-xl shadow-sm border ${
+                      message.status === 'unread' 
+                        ? 'border-blue-200 dark:border-blue-800' 
+                        : 'border-gray-200 dark:border-gray-800'
+                    }`}
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{message.name}</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{message.email}</p>
+                        {message.mobileNumber && (
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{message.mobileNumber}</p>
+                        )}
+                      </div>
+                      <div>
+                        <span className={`px-2 py-1 text-xs rounded-full ${
+                          message.status === 'unread' 
+                            ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300' 
+                            : 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300'
+                        }`}>
+                          {message.status}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg mb-2">
+                      <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">{message.message}</p>
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+                      Received: {new Date(message.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

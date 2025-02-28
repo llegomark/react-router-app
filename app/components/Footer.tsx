@@ -1,4 +1,3 @@
-// app/components/Footer.tsx - Updated with About Us link
 import { Link } from 'react-router';
 
 export default function Footer() {
@@ -31,13 +30,18 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/contact" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                  Contact
+                </Link>
+              </li>
+              <li>
                 <Link to="/privacy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  Privacy Policy
+                  Privacy
                 </Link>
               </li>
               <li>
                 <Link to="/terms" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  Terms of Use
+                  Terms
                 </Link>
               </li>
               <li>
