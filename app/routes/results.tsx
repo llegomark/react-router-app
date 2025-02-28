@@ -5,14 +5,14 @@ import type { Route } from './+types/results';
 export const meta: Route.MetaFunction = ({ data }) => {
   if (!data?.category) {
     return [
-      { title: "Quiz - Error" },
+      { title: "NQESH Review - Error" },
       { name: "description", content: "Results not found" },
     ];
   }
 
   return [
-    { title: `${data.category.name} - Results` },
-    { name: "description", content: "Your quiz results" },
+    { title: `${data.category.name} - Review Results` },
+    { name: "description", content: "Your NQESH review results" },
   ];
 };
 
@@ -114,7 +114,7 @@ export default function Results({ loaderData }: Route.ComponentProps) {
       <div className="container mx-auto px-4 max-w-lg">
         <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
           <h1 className="text-2xl font-bold text-center mb-8 text-gray-900 dark:text-white">
-            {category.name} - Quiz Results
+            {category.name} - Review Results
           </h1>
 
           <div className="text-center mb-8">

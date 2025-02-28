@@ -176,7 +176,7 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
 
   const [categories, setCategories] = useState(initialCategories || []);
   const [messages, setMessages] = useState(initialMessages || []);
-  const [questions, setQuestions] = useState(initialQuestions || []); 
+  const [questions, setQuestions] = useState(initialQuestions || []);
   const [pagination, setPagination] = useState(initialPagination);
   const [activeTab, setActiveTab] = useState<'categories' | 'questions' | 'allquestions' | 'messages'>('categories');
   const addCategoryFetcher = useFetcher();
@@ -219,47 +219,43 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
       <div className="container mx-auto px-4 max-w-2xl">
         <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 mb-8">
           <h1 className="text-3xl font-bold p-6 text-center text-gray-900 dark:text-white">Quiz Admin Panel</h1>
-          
+
           {/* Simple, clean tabs design */}
           <div className="border-t border-gray-200 dark:border-gray-800">
             <div className="grid grid-cols-2 sm:grid-cols-4">
               <button
                 onClick={() => setActiveTab('categories')}
-                className={`py-3 text-center font-medium transition-colors ${
-                  activeTab === 'categories'
+                className={`py-3 text-center font-medium transition-colors ${activeTab === 'categories'
                     ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
                     : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/70'
-                }`}
+                  }`}
               >
                 Categories
               </button>
               <button
                 onClick={() => setActiveTab('questions')}
-                className={`py-3 text-center font-medium transition-colors ${
-                  activeTab === 'questions'
+                className={`py-3 text-center font-medium transition-colors ${activeTab === 'questions'
                     ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
                     : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/70'
-                }`}
+                  }`}
               >
                 Add Question
               </button>
               <button
                 onClick={() => setActiveTab('allquestions')}
-                className={`py-3 text-center font-medium transition-colors ${
-                  activeTab === 'allquestions'
+                className={`py-3 text-center font-medium transition-colors ${activeTab === 'allquestions'
                     ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
                     : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/70'
-                }`}
+                  }`}
               >
                 All Questions
               </button>
               <button
                 onClick={() => setActiveTab('messages')}
-                className={`py-3 text-center font-medium transition-colors ${
-                  activeTab === 'messages'
+                className={`py-3 text-center font-medium transition-colors ${activeTab === 'messages'
                     ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
                     : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/70'
-                }`}
+                  }`}
               >
                 Messages
               </button>
@@ -530,11 +526,10 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
                               {options.map((option: string, index: number) => (
                                 <div
                                   key={index}
-                                  className={`mb-1 p-2 rounded ${
-                                    index === question.correctAnswer
+                                  className={`mb-1 p-2 rounded ${index === question.correctAnswer
                                       ? 'bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800'
                                       : 'bg-white dark:bg-gray-900/50'
-                                  }`}
+                                    }`}
                                 >
                                   <span className={index === question.correctAnswer ? 'font-medium' : ''}>
                                     {index === question.correctAnswer && '✓ '}{option}
@@ -578,11 +573,11 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
                   >
                     Previous
                   </button>
-                  
+
                   <div className="text-sm text-gray-700 dark:text-gray-300 px-3">
                     Page {pagination.currentPage} of {pagination.totalPages}
                   </div>
-                  
+
                   <button
                     onClick={() => handlePageChange(pagination.currentPage + 1)}
                     disabled={pagination.currentPage >= pagination.totalPages}
@@ -609,13 +604,12 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
                   {messages && messages.map((message: any) => (
                     <div
                       key={message.id}
-                      className={`bg-gray-50 dark:bg-gray-800 p-5 rounded-lg ${
-                        message.status === 'unread'
+                      className={`bg-gray-50 dark:bg-gray-800 p-5 rounded-lg ${message.status === 'unread'
                           ? 'border-l-4 border-blue-500 dark:border-blue-700'
                           : ''
-                      }`}
+                        }`}
                     >
-                      <div className="flex justify-between items-start mb-3">
+                      <div className="flex justify-between items-start mb-3 flex-wrap gap-2">
                         <div>
                           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{message.name}</h3>
                           <p className="text-sm text-gray-600 dark:text-gray-400">{message.email}</p>
@@ -624,11 +618,10 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
                           )}
                         </div>
                         <div className="flex items-center">
-                          <span className={`px-2 py-1 text-xs rounded-full mr-2 ${
-                            message.status === 'unread'
+                          <span className={`px-2 py-1 text-xs rounded-full mr-2 ${message.status === 'unread'
                               ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300'
                               : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
-                          }`}>
+                            }`}>
                             {message.status}
                           </span>
 
@@ -636,13 +629,38 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
                             <input type="hidden" name="action" value="toggle-message-status" />
                             <input type="hidden" name="messageId" value={message.id} />
                             <input type="hidden" name="currentStatus" value={message.status} />
+
+                            {/* Desktop version (text button) */}
                             <button
                               type="submit"
-                              className="px-2 py-1.5 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition-colors"
+                              className="hidden sm:block px-2 py-1.5 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition-colors"
                               title={message.status === 'unread' ? "Mark as read" : "Mark as unread"}
                               disabled={messageStatusFetcher.state !== 'idle'}
                             >
                               {message.status === 'unread' ? 'Mark read' : 'Mark unread'}
+                            </button>
+
+                            {/* Mobile version (icon button) */}
+                            <button
+                              type="submit"
+                              className="sm:hidden p-2 rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition-colors"
+                              title={message.status === 'unread' ? "Mark as read" : "Mark as unread"}
+                              disabled={messageStatusFetcher.state !== 'idle'}
+                            >
+                              {message.status === 'unread'
+                                ? (
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                  </svg>
+                                )
+                                : (
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                  </svg>
+                                )
+                              }
                             </button>
                           </messageStatusFetcher.Form>
                         </div>

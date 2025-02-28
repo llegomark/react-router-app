@@ -34,9 +34,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12">
       <div className="container mx-auto px-4 max-w-2xl">
-        <h1 className="text-4xl font-bold mb-10 text-center text-gray-900 dark:text-white">
-          Quiz Categories
-        </h1>
+        <h2 className="text-xl font-bold mb-10 text-center text-gray-900 dark:text-white">
+          Select a Category to Start
+        </h2>
         
         {needsMigration ? (
           <div className="text-center p-8 bg-yellow-50 dark:bg-yellow-950 rounded-xl shadow-sm border border-yellow-200 dark:border-yellow-900 mb-8">

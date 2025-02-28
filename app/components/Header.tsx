@@ -33,19 +33,14 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link to="/admin" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  Admin
+                <Link to="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                  About
                 </Link>
               </li>
               <li>
-                <Link to="/seed" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  Seed Database
+                <Link to="/contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                  Contact
                 </Link>
-              </li>
-              <li>
-                <a href="https://deped.gov.ph" target="_blank" rel="noopener noreferrer" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  DepEd
-                </a>
               </li>
             </ul>
           </nav>
@@ -101,31 +96,21 @@ export default function Header() {
               </li>
               <li>
                 <Link 
-                  to="/admin" 
+                  to="/about" 
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Admin
+                  About
                 </Link>
               </li>
               <li>
                 <Link 
-                  to="/seed" 
+                  to="/contact" 
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Seed Database
+                  Contact
                 </Link>
-              </li>
-              <li>
-                <a 
-                  href="https://deped.gov.ph" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                >
-                  DepEd
-                </a>
               </li>
             </ul>
           </nav>

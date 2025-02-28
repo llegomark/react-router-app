@@ -15,16 +15,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/admin" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  Admin
-                </Link>
-              </li>
-              <li>
-                <Link to="/seed" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  Seed Database
-                </Link>
-              </li>
-              <li>
                 <Link to="/about" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   About Us
                 </Link>
@@ -43,16 +33,6 @@ export default function Footer() {
                 <Link to="/terms" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   Terms
                 </Link>
-              </li>
-              <li>
-                <a 
-                  href="https://deped.gov.ph" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1"
-                >
-                  DepEd
-                </a>
               </li>
             </ul>
           </nav>

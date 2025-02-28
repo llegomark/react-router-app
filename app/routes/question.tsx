@@ -316,7 +316,7 @@ export default function Question({ loaderData }: Route.ComponentProps) {
             onClick={handleEndQuiz}
             className="px-5 py-2.5 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors cursor-pointer"
           >
-            End Quiz
+            Exit Review
           </button>
 
           {(hasAnswered || timeRemaining === 0) && (
