@@ -33,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -44,14 +44,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const navigation = useNavigation();
-
   const isGlobalLoading = navigation.state === 'loading' || navigation.state === 'submitting';
 
   return (
     <>
       {isGlobalLoading && (
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-100 dark:bg-gray-900 opacity-50 z-50 flex justify-center items-center">
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-100/75 dark:bg-gray-900/75 z-50 flex justify-center items-center backdrop-blur-xs">
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="mt-4 text-blue-600 dark:text-blue-400 font-medium text-center">Loading...</div>
+          </div>
         </div>
       )}
       <Outlet />
@@ -76,14 +78,18 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12">
+      <div className="container mx-auto px-4 max-w-2xl">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
+          <h1 className="text-2xl font-bold text-center mb-4 text-gray-900 dark:text-white">{message}</h1>
+          <p className="text-center mb-6 text-gray-700 dark:text-gray-300">{details}</p>
+          {stack && (
+            <pre className="w-full p-4 overflow-x-auto bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 text-sm">
+              <code>{stack}</code>
+            </pre>
+          )}
+        </div>
+      </div>
     </main>
   );
 }

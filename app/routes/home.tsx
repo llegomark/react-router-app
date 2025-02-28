@@ -32,54 +32,58 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const { categories, needsMigration } = loaderData as { categories: any[], needsMigration: boolean };
 
   return (
-    <div className="container mx-auto p-4 max-w-2xl">
-      <h1 className="text-3xl font-bold mb-8 text-center">Quiz Categories</h1>
-      
-      {needsMigration ? (
-        <div className="text-center p-6 bg-yellow-100 dark:bg-yellow-900 rounded-lg shadow-lg mb-6">
-          <h2 className="text-xl font-bold mb-4">Database Setup Required</h2>
-          <p className="mb-4">Your database needs to be migrated before using the application.</p>
-          <p className="mb-6">Please run the following command in your terminal:</p>
-          <div className="bg-gray-800 text-white p-3 rounded-md text-left font-mono mb-6 overflow-x-auto">
-            npm run db:migrate
-          </div>
-          <p className="mb-4">After migration, you can seed the database with sample data:</p>
-          <Link 
-            to="/seed" 
-            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg inline-block cursor-pointer"
-          >
-            Go to Seed Page
-          </Link>
-        </div>
-      ) : categories.length === 0 ? (
-        <div className="text-center">
-          <p className="mb-4">No quiz categories found. Please seed the database first.</p>
-          <Link 
-            to="/seed" 
-            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg inline-block cursor-pointer"
-          >
-            Go to Seed Page
-          </Link>
-        </div>
-      ) : (
-        <div className="grid gap-4">
-          {categories.map((category: {id: number; name: string; description: string; icon: string}) => (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12">
+      <div className="container mx-auto px-4 max-w-2xl">
+        <h1 className="text-4xl font-bold mb-10 text-center text-gray-900 dark:text-white">
+          Quiz Categories
+        </h1>
+        
+        {needsMigration ? (
+          <div className="text-center p-8 bg-yellow-50 dark:bg-yellow-950 rounded-xl shadow-sm border border-yellow-200 dark:border-yellow-900 mb-8">
+            <h2 className="text-xl font-bold mb-4 text-yellow-800 dark:text-yellow-300">Database Setup Required</h2>
+            <p className="mb-4 text-gray-700 dark:text-gray-300">Your database needs to be migrated before using the application.</p>
+            <p className="mb-6 text-gray-700 dark:text-gray-300">Please run the following command in your terminal:</p>
+            <div className="bg-gray-900 text-gray-200 p-4 rounded-lg text-left font-mono mb-6 overflow-x-auto">
+              npm run db:migrate
+            </div>
+            <p className="mb-4 text-gray-700 dark:text-gray-300">After migration, you can seed the database with sample data:</p>
             <Link 
-              key={category.id} 
-              to={`/category/${category.id}/1`}
-              className="block p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+              to="/seed" 
+              className="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg inline-block font-medium transition-colors"
             >
-              <div className="flex items-center">
-                <span className="text-4xl mr-4">{category.icon}</span>
-                <div>
-                  <h2 className="text-xl font-semibold">{category.name}</h2>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm">{category.description}</p>
-                </div>
-              </div>
+              Go to Seed Page
             </Link>
-          ))}
-        </div>
-      )}
+          </div>
+        ) : categories.length === 0 ? (
+          <div className="text-center p-8 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
+            <p className="mb-6 text-gray-700 dark:text-gray-300">No quiz categories found. Please seed the database first.</p>
+            <Link 
+              to="/seed" 
+              className="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg inline-block font-medium transition-colors cursor-pointer"
+            >
+              Go to Seed Page
+            </Link>
+          </div>
+        ) : (
+          <div className="grid gap-4">
+            {categories.map((category: {id: number; name: string; description: string; icon: string}) => (
+              <Link 
+                key={category.id} 
+                to={`/category/${category.id}/1`}
+                className="block p-6 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 hover:shadow-md hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 cursor-pointer"
+              >
+                <div className="flex items-center">
+                  <span className="text-5xl mr-5">{category.icon}</span>
+                  <div>
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">{category.name}</h2>
+                    <p className="text-gray-600 dark:text-gray-400">{category.description}</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

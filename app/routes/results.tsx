@@ -71,7 +71,7 @@ export default function Results({ loaderData }: Route.ComponentProps) {
     navigate(firstQuestionUrl);
   };
 
-  // FIXED: Handle back to home action to reset quiz state
+  // Handle back to home action to reset quiz state
   const handleBackToHome = () => {
     // Reset quiz state first
     resetQuiz();
@@ -110,41 +110,49 @@ export default function Results({ loaderData }: Route.ComponentProps) {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-lg">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <h1 className="text-2xl font-bold text-center mb-6">{category.name} - Quiz Results</h1>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12">
+      <div className="container mx-auto px-4 max-w-lg">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
+          <h1 className="text-2xl font-bold text-center mb-8 text-gray-900 dark:text-white">
+            {category.name} - Quiz Results
+          </h1>
 
-        <div className="text-center mb-6">
-          <div className="text-5xl font-bold mb-2">
-            {score}%
+          <div className="text-center mb-8">
+            <div className={`text-6xl font-bold mb-4 ${
+              score >= 75 ? 'text-green-600 dark:text-green-400' : 
+              score >= 50 ? 'text-yellow-600 dark:text-yellow-400' : 
+              'text-red-600 dark:text-red-400'
+            }`}>
+              {score}%
+            </div>
+            <p className="text-lg mb-4 text-gray-700 dark:text-gray-300">
+              You answered {correctAnswers} out of {totalQuestions} questions correctly.
+            </p>
+            <p className="text-base italic text-gray-600 dark:text-gray-400">
+              {getPerformanceMessage(score)}
+            </p>
           </div>
-          <p className="text-lg mb-3">
-            You answered {correctAnswers} out of {totalQuestions} questions correctly.
-          </p>
-          <p className="text-base italic">
-            {getPerformanceMessage(score)}
-          </p>
-        </div>
 
-        {answeredQuestions < totalQuestions && (
-          <div className="mb-6 p-3 bg-yellow-100 dark:bg-yellow-900 rounded-lg text-center text-sm">
-            <p>You didn't complete all questions in the quiz.</p>
+          {answeredQuestions < totalQuestions && (
+            <div className="mb-8 p-4 bg-yellow-50 dark:bg-yellow-950 rounded-lg border border-yellow-200 dark:border-yellow-900 text-center">
+              <p className="text-yellow-800 dark:text-yellow-300">You didn't complete all questions in the quiz.</p>
+            </div>
+          )}
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={handleTryAgain}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors cursor-pointer"
+            >
+              Try Again
+            </button>
+            <button
+              onClick={handleBackToHome}
+              className="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors cursor-pointer"
+            >
+              Back to Home
+            </button>
           </div>
-        )}
-
-        <div className="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4 justify-center">
-          <button
-            onClick={handleTryAgain}
-            className="px-5 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium cursor-pointer"
-          >
-            Try Again
-          </button>
-          <button
-            onClick={handleBackToHome}
-            className="px-5 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium cursor-pointer"
-          >
-            Back to Home
-          </button>
         </div>
       </div>
     </div>

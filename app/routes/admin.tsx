@@ -114,7 +114,6 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
   const addCategoryFetcher = useFetcher(); // Fetcher for add category form
   const addQuestionFetcher = useFetcher(); // Fetcher for add question form
 
-
   // Optimistically update categories on successful category add
   useEffect(() => {
     if (addCategoryFetcher.data && addCategoryFetcher.data.success && addCategoryFetcher.data.category) {
@@ -122,259 +121,266 @@ export default function Admin({ loaderData, actionData }: Route.ComponentProps) 
     }
   }, [addCategoryFetcher.data]);
 
-
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-4 text-center">Quiz Admin Panel</h1>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8">
+      <div className="container mx-auto px-4 max-w-4xl">
+        <h1 className="text-3xl font-bold mb-8 text-center text-gray-900 dark:text-white">Quiz Admin Panel</h1>
 
-      {actionData && (
-        <div className={`p-4 mb-4 rounded-lg ${actionData.success
-          ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
-          : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-          }`}>
-          {(actionData as any).message}
-        </div>
-      )}
+        {actionData && (
+          <div className={`p-4 mb-6 rounded-lg ${actionData.success
+            ? 'bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-900 text-green-800 dark:text-green-300'
+            : 'bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-900 text-red-800 dark:text-red-300'
+            }`}>
+            {(actionData as any).message}
+          </div>
+        )}
 
-      <div className="mb-6">
-        <div className="flex border-b border-gray-200 dark:border-gray-700">
-          <button
-            className={`py-2 px-4 font-medium ${activeTab === 'categories' ? 'border-b-2 border-blue-500' : ''}`}
-            onClick={() => setActiveTab('categories')}
-          >
-            Categories
-          </button>
-          <button
-            className={`py-2 px-4 font-medium ${activeTab === 'questions' ? 'border-b-2 border-blue-500' : ''}`}
-            onClick={() => setActiveTab('questions')}
-          >
-            Questions
-          </button>
-        </div>
-      </div>
-
-      {activeTab === 'categories' && (
-        <div>
-          <h2 className="text-xl font-bold mb-4">Add New Category</h2>
-          <addCategoryFetcher.Form method="post" className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-6"> {/* Use fetcher form */}
-            <input type="hidden" name="action" value="add-category" />
-            <div className="grid grid-cols-1 gap-4 mb-4">
-              <div>
-                <label className="block mb-1">ID (numeric):</label>
-                <input
-                  type="number"
-                  name="id"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block mb-1">Name:</label>
-                <input
-                  type="text"
-                  name="name"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block mb-1">Description:</label>
-                <textarea
-                  name="description"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  rows={3}
-                  required
-                ></textarea>
-              </div>
-
-              <div>
-                <label className="block mb-1">Icon (emoji):</label>
-                <input
-                  type="text"
-                  name="icon"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  placeholder="🏫"
-                  required
-                />
-              </div>
-            </div>
-
+        <div className="mb-6">
+          <div className="flex border-b border-gray-200 dark:border-gray-700">
             <button
-              type="submit"
-              disabled={addCategoryFetcher.state !== 'idle'}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer"
+              className={`py-3 px-5 font-medium transition-colors ${activeTab === 'categories' 
+                ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400' 
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'}`}
+              onClick={() => setActiveTab('categories')}
             >
-              {addCategoryFetcher.state !== 'idle' ? 'Adding Category...' : 'Add Category'} {/* Pending UI for button */}
+              Categories
             </button>
-          </addCategoryFetcher.Form>
+            <button
+              className={`py-3 px-5 font-medium transition-colors ${activeTab === 'questions' 
+                ? 'border-b-2 border-blue-600 text-blue-600 dark:text-blue-400' 
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'}`}
+              onClick={() => setActiveTab('questions')}
+            >
+              Questions
+            </button>
+          </div>
+        </div>
 
-          <h2 className="text-xl font-bold mb-4">Existing Categories</h2>
-          {categories.length === 0 ? (
-            <p>No categories yet. Add one above!</p>
-          ) : (
-            <div className="grid grid-cols-1 gap-4">
-              {categories.map((category: any) => (
-                <div key={category.id} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                  <div className="flex items-center mb-2">
-                    <span className="text-3xl mr-3">{category.icon}</span>
-                    <h3 className="text-lg font-semibold">{category.name}</h3>
-                  </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">{category.description}</p>
-                  <p className="text-xs text-gray-500 mt-2">ID: {category.id}</p>
+        {activeTab === 'categories' && (
+          <div>
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Add New Category</h2>
+            <addCategoryFetcher.Form method="post" className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 mb-8">
+              <input type="hidden" name="action" value="add-category" />
+              <div className="grid grid-cols-1 gap-4 mb-6">
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">ID (numeric):</label>
+                  <input
+                    type="number"
+                    name="id"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    required
+                  />
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
 
-      {activeTab === 'questions' && (
-        <div>
-          <h2 className="text-xl font-bold mb-4">Add New Question</h2>
-          <addQuestionFetcher.Form method="post" className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow mb-6"> {/* Use fetcher form */}
-            <input type="hidden" name="action" value="add-question" />
-            <div className="grid grid-cols-1 gap-4 mb-4">
-              <div>
-                <label className="block mb-1">ID (numeric):</label>
-                <input
-                  type="number"
-                  name="id"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  required
-                />
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Name:</label>
+                  <input
+                    type="text"
+                    name="name"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Description:</label>
+                  <textarea
+                    name="description"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    rows={3}
+                    required
+                  ></textarea>
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Icon (emoji):</label>
+                  <input
+                    type="text"
+                    name="icon"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    placeholder="🏫"
+                    required
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block mb-1">Category:</label>
-                <select
-                  name="categoryId"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  required
-                >
-                  <option value="">Select a category</option>
-                  {categories.map((category: any) => (
-                    <option key={category.id} value={category.id}>{category.name}</option>
-                  ))}
-                </select>
+              <button
+                type="submit"
+                disabled={addCategoryFetcher.state !== 'idle'}
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors cursor-pointer"
+              >
+                {addCategoryFetcher.state !== 'idle' ? 'Adding Category...' : 'Add Category'}
+              </button>
+            </addCategoryFetcher.Form>
+
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Existing Categories</h2>
+            {categories.length === 0 ? (
+              <p className="text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 text-center">
+                No categories yet. Add one above!
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 gap-4">
+                {categories.map((category: any) => (
+                  <div key={category.id} className="bg-white dark:bg-gray-900 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
+                    <div className="flex items-center mb-3">
+                      <span className="text-4xl mr-4">{category.icon}</span>
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{category.name}</h3>
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{category.description}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">ID: {category.id}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'questions' && (
+          <div>
+            <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Add New Question</h2>
+            <addQuestionFetcher.Form method="post" className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 mb-6">
+              <input type="hidden" name="action" value="add-question" />
+              <div className="grid grid-cols-1 gap-4 mb-6">
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">ID (numeric):</label>
+                  <input
+                    type="number"
+                    name="id"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Category:</label>
+                  <select
+                    name="categoryId"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    required
+                  >
+                    <option value="">Select a category</option>
+                    {categories.map((category: any) => (
+                      <option key={category.id} value={category.id}>{category.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Question:</label>
+                  <textarea
+                    name="question"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    rows={3}
+                    required
+                  ></textarea>
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Option 1:</label>
+                  <input
+                    type="text"
+                    name="option1"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Option 2:</label>
+                  <input
+                    type="text"
+                    name="option2"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Option 3:</label>
+                  <input
+                    type="text"
+                    name="option3"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Option 4:</label>
+                  <input
+                    type="text"
+                    name="option4"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Correct Answer (0-3):</label>
+                  <select
+                    name="correctAnswer"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    required
+                  >
+                    <option value="0">Option 1</option>
+                    <option value="1">Option 2</option>
+                    <option value="2">Option 3</option>
+                    <option value="3">Option 4</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Explanation:</label>
+                  <textarea
+                    name="explanation"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    rows={3}
+                    required
+                  ></textarea>
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Reference Title:</label>
+                  <input
+                    type="text"
+                    name="referenceTitle"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Reference URL:</label>
+                  <input
+                    type="url"
+                    name="referenceUrl"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-gray-700 dark:text-gray-300 font-medium">Reference Copyright:</label>
+                  <input
+                    type="text"
+                    name="referenceCopyright"
+                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden"
+                    required
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block mb-1">Question:</label>
-                <textarea
-                  name="question"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  rows={3}
-                  required
-                ></textarea>
-              </div>
-
-              <div>
-                <label className="block mb-1">Option 1:</label>
-                <input
-                  type="text"
-                  name="option1"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block mb-1">Option 2:</label>
-                <input
-                  type="text"
-                  name="option2"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block mb-1">Option 3:</label>
-                <input
-                  type="text"
-                  name="option3"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block mb-1">Option 4:</label>
-                <input
-                  type="text"
-                  name="option4"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block mb-1">Correct Answer (0-3):</label>
-                <select
-                  name="correctAnswer"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  required
-                >
-                  <option value="0">Option 1</option>
-                  <option value="1">Option 2</option>
-                  <option value="2">Option 3</option>
-                  <option value="3">Option 4</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block mb-1">Explanation:</label>
-                <textarea
-                  name="explanation"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  rows={3}
-                  required
-                ></textarea>
-              </div>
-
-              <div>
-                <label className="block mb-1">Reference Title:</label>
-                <input
-                  type="text"
-                  name="referenceTitle"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block mb-1">Reference URL:</label>
-                <input
-                  type="url"
-                  name="referenceUrl"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block mb-1">Reference Copyright:</label>
-                <input
-                  type="text"
-                  name="referenceCopyright"
-                  className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                  required
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={addQuestionFetcher.state !== 'idle'}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer"
-            >
-              {addQuestionFetcher.state !== 'idle' ? 'Adding Question...' : 'Add Question'} {/* Pending UI for button */}
-            </button>
-          </addQuestionFetcher.Form>
-        </div>
-      )}
+              <button
+                type="submit"
+                disabled={addQuestionFetcher.state !== 'idle'}
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors cursor-pointer"
+              >
+                {addQuestionFetcher.state !== 'idle' ? 'Adding Question...' : 'Add Question'}
+              </button>
+            </addQuestionFetcher.Form>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -152,52 +152,54 @@ export default function Seed({ actionData }: Route.ComponentProps) {
   const seedFetcher = useFetcher(); // Fetcher for seed form
 
   return (
-    <div className="container mx-auto p-4 max-w-lg">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-        <h1 className="text-2xl font-bold mb-6 text-center">Seed Quiz Database</h1>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8">
+      <div className="container mx-auto px-4 max-w-lg">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
+          <h1 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">Seed Quiz Database</h1>
 
-        {actionData && (
-          <div className={`p-4 mb-6 rounded-lg ${actionData.success
-            ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
-            : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-            }`}>
-            {(actionData as any).message}
+          {actionData && (
+            <div className={`p-5 mb-8 rounded-lg ${actionData.success
+              ? 'bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-900 text-green-800 dark:text-green-300'
+              : 'bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-900 text-red-800 dark:text-red-300'
+              }`}>
+              {(actionData as any).message}
 
-            {(actionData as any).needsMigration && (
-              <div className="mt-4 p-4 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
-                <p className="font-medium mb-2">Please run this command in your terminal:</p>
-                <div className="bg-gray-800 text-white p-3 rounded-md text-left font-mono overflow-x-auto">
-                  npm run db:migrate
+              {(actionData as any).needsMigration && (
+                <div className="mt-5 p-4 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-900 rounded-lg">
+                  <p className="font-medium mb-3 text-yellow-800 dark:text-yellow-300">Please run this command in your terminal:</p>
+                  <div className="bg-gray-900 text-white p-4 rounded-lg text-left font-mono overflow-x-auto">
+                    npm run db:migrate
+                  </div>
+                  <p className="mt-3 text-yellow-800 dark:text-yellow-300">Then return to this page to seed the database.</p>
                 </div>
-                <p className="mt-2">Then return to this page to seed the database.</p>
-              </div>
-            )}
+              )}
+            </div>
+          )}
+
+          <div className="mb-8">
+            <p className="mb-4 text-gray-700 dark:text-gray-300">This page will populate the database with sample quiz data including categories and questions.</p>
+            <p className="mb-4 font-medium text-amber-600 dark:text-amber-400">Warning: This will delete any existing quiz data!</p>
           </div>
-        )}
 
-        <div className="mb-8">
-          <p className="mb-4">This page will populate the database with sample quiz data including categories and questions.</p>
-          <p className="mb-4 font-medium">Warning: This will delete any existing quiz data!</p>
-        </div>
+          <seedFetcher.Form method="post" className="text-center">
+            <button
+              type="submit"
+              disabled={seedFetcher.state !== 'idle'}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors cursor-pointer"
+            >
+              {seedFetcher.state !== 'idle' ? 'Seeding Database...' : 'Seed Database'}
+            </button>
+          </seedFetcher.Form>
 
-        <seedFetcher.Form method="post" className="text-center"> {/* Use fetcher form */}
-          <button
-            type="submit"
-            disabled={seedFetcher.state !== 'idle'}
-            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium"
-          >
-            {seedFetcher.state !== 'idle' ? 'Seeding Database...' : 'Seed Database'} {/* Pending UI for button */}
-          </button>
-        </seedFetcher.Form>
-
-        <div className="mt-8 border-t pt-6">
-          <h2 className="text-lg font-medium mb-3">Having Database Issues?</h2>
-          <p className="mb-3">If you're seeing database errors, please try the following steps:</p>
-          <ol className="list-decimal list-inside space-y-2 mb-4">
-            <li>Run migrations: <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">npm run db:migrate</code></li>
-            <li>Return to this page and seed the database</li>
-            <li>If issues persist, check the console for detailed errors</li>
-          </ol>
+          <div className="mt-10 border-t border-gray-200 dark:border-gray-800 pt-6">
+            <h2 className="text-lg font-medium mb-4 text-gray-900 dark:text-white">Having Database Issues?</h2>
+            <p className="mb-4 text-gray-700 dark:text-gray-300">If you're seeing database errors, please try the following steps:</p>
+            <ol className="list-decimal list-inside space-y-2 mb-4 text-gray-700 dark:text-gray-300">
+              <li>Run migrations: <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-sm text-blue-600 dark:text-blue-400">npm run db:migrate</code></li>
+              <li>Return to this page and seed the database</li>
+              <li>If issues persist, check the console for detailed errors</li>
+            </ol>
+          </div>
         </div>
       </div>
     </div>
