@@ -7,5 +7,6 @@ export default [
     route("results", "routes/results.tsx"),
   ]),
   route("seed", "routes/seed.tsx"),
-  route("admin", "routes/admin.tsx")
+  route("admin", "routes/admin.tsx"),
+  route("*", "routes/not-found.tsx")
 ] satisfies RouteConfig;
