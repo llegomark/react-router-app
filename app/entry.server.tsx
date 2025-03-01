@@ -13,6 +13,15 @@ export default async function handleRequest(
   let shellRendered = false;
   const userAgent = request.headers.get("user-agent");
 
+  // Set security headers for all responses
+  responseHeaders.set("X-Frame-Options", "DENY");
+  responseHeaders.set("X-Content-Type-Options", "nosniff");
+  responseHeaders.set("Cache-Control", "max-age=3600, s-maxage=86400");
+  responseHeaders.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  responseHeaders.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
+  responseHeaders.set("Permissions-Policy", "geolocation=()");
+  responseHeaders.set("X-XSS-Protection", "1; mode=block");
+
   const body = await renderToReadableStream(
     <ServerRouter context={routerContext} url={request.url} />,
     {
