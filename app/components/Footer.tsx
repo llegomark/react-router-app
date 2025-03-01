@@ -10,33 +10,8 @@ export default function Footer() {
           <nav className="mb-3">
             <ul className="flex flex-wrap justify-center gap-3">
               <li>
-                <Link to="/" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link to="/reviewer" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  Reviewer
-                </Link>
-              </li>
-              <li>
-                <Link to="/pricing" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link to="/faq" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link to="/about" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  About Us
-                </Link>
-              </li>
-              <li>
                 <Link to="/contact" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  Contact
+                  Contact Us
                 </Link>
               </li>
               <li>
@@ -51,12 +26,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link to="/privacy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  Privacy
+                  Privacy Policy
                 </Link>
               </li>
               <li>
                 <Link to="/terms" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
-                  Terms
+                  Terms of Use
                 </Link>
               </li>
             </ul>

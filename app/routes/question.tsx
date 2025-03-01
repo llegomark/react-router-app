@@ -219,8 +219,8 @@ export default function Question({ loaderData }: Route.ComponentProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8">
-      <div className="container mx-auto px-4 max-w-2xl">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8 md:py-12">
+      <div className="container mx-auto px-4 max-w-5xl">
         <div className="mb-8 bg-white dark:bg-gray-900 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
           <h1 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white">{category.name}</h1>
           <div className="flex justify-between items-center mb-3">

@@ -166,8 +166,8 @@ export default function Contact({ actionData }: Route.ComponentProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8">
-      <div className="container mx-auto px-4 max-w-2xl">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8 md:py-12">
+      <div className="container mx-auto px-4 max-w-5xl">
         <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 mb-4">

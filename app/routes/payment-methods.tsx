@@ -11,7 +11,7 @@ export const meta: Route.MetaFunction = () => {
 export default function PaymentMethods() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8 md:py-12">
-      <div className="container mx-auto px-4 max-w-3xl">
+      <div className="container mx-auto px-4 max-w-5xl">
         <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8 mb-8">
           <div className="text-center mb-8">
             <span className="text-4xl mb-4 inline-block">💳</span>
