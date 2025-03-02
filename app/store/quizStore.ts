@@ -34,7 +34,7 @@ interface QuizState {
   timeRemaining: number; // in seconds
   isTimerActive: boolean;
   isQuizEnded: boolean;
-  
+
   // Actions
   setCurrentCategory: (categoryId: number) => void;
   setCurrentQuestionIndex: (index: number) => void;
@@ -45,7 +45,6 @@ interface QuizState {
   decrementTimer: () => void;
   endQuiz: () => void;
   resetQuiz: () => void;
-  resetShuffledQuestions: (categoryId: number) => void;
 }
 
 export const useQuizStore = create<QuizState>((set) => ({
@@ -55,49 +54,49 @@ export const useQuizStore = create<QuizState>((set) => ({
   timeRemaining: 120, // 2 minutes in seconds
   isTimerActive: false,
   isQuizEnded: false,
-  
+
   setCurrentCategory: (categoryId) => {
-    set({ 
-      currentCategoryId: categoryId, 
-      currentQuestionIndex: 0, 
-      selectedAnswers: {}, 
+    set({
+      currentCategoryId: categoryId,
+      currentQuestionIndex: 0,
+      selectedAnswers: {},
       isQuizEnded: false,
       timeRemaining: 120,
       isTimerActive: true
     });
   },
-  
-  setCurrentQuestionIndex: (index) => set(() => ({ 
+
+  setCurrentQuestionIndex: (index) => set(() => ({
     currentQuestionIndex: index,
     timeRemaining: 120,
     isTimerActive: true
   })),
-  
+
   selectAnswer: (questionId, optionIndex) => set((state) => ({
     selectedAnswers: { ...state.selectedAnswers, [questionId]: optionIndex },
     isTimerActive: false,
   })),
-  
+
   startTimer: () => set({ isTimerActive: true }),
-  
+
   stopTimer: () => set({ isTimerActive: false }),
-  
+
   resetTimer: () => set({ timeRemaining: 120, isTimerActive: true }),
-  
+
   decrementTimer: () => set((state) => {
     if (state.timeRemaining <= 0) {
-      return { 
-        timeRemaining: 0, 
-        isTimerActive: false 
+      return {
+        timeRemaining: 0,
+        isTimerActive: false
       };
     }
-    return { 
-      timeRemaining: state.timeRemaining - 1 
+    return {
+      timeRemaining: state.timeRemaining - 1
     };
   }),
-  
+
   endQuiz: () => set({ isQuizEnded: true, isTimerActive: false }),
-  
+
   resetQuiz: () => set({
     currentQuestionIndex: 0,
     selectedAnswers: {},
@@ -105,15 +104,5 @@ export const useQuizStore = create<QuizState>((set) => ({
     isTimerActive: true,
     isQuizEnded: false,
   }),
-  
-  resetShuffledQuestions: (categoryId) => {
-    // Remove the stored shuffled order from session storage
-    if (typeof window !== 'undefined' && window.sessionStorage) {
-      try {
-        window.sessionStorage.removeItem(`shuffled_questions_${categoryId}`);
-      } catch (e) {
-        console.error("Failed to reset shuffled questions:", e);
-      }
-    }
-  }
+
 }));

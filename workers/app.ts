@@ -146,6 +146,13 @@ async function generateSitemap(env: CloudflareEnvironment): Promise<string> {
   return sitemap;
 }
 
+function generateRobotsTxt(baseUrl: string): string {
+  return `User-agent: *
+Disallow: /
+
+Sitemap: ${baseUrl}/sitemap.xml`;
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -179,6 +186,17 @@ export default {
         console.error("Failed to generate sitemap:", error);
         return new Response("Sitemap generation failed", { status: 500 });
       }
+    }
+
+    // Handle robots.txt requests
+    if (url.pathname === "/robots.txt") {
+      const robotsTxt = generateRobotsTxt(url.origin);
+      return new Response(robotsTxt, {
+        headers: {
+          "Content-Type": "text/plain",
+          "Cache-Control": "max-age=86400", // Cache for 24 hours
+        },
+      });
     }
 
     const loadContext = getLoadContext({

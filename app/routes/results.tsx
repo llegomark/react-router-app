@@ -68,7 +68,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 export default function Results({ loaderData }: Route.ComponentProps) {
   const { category, questions } = loaderData as any;
   const navigate = useNavigate();
-  const { selectedAnswers, resetQuiz, resetShuffledQuestions } = useQuizStore();
+  const { selectedAnswers, resetQuiz } = useQuizStore(); // Removed resetShuffledQuestions
 
   // Calculate score
   const totalQuestions = questions.length;
@@ -83,7 +83,6 @@ export default function Results({ loaderData }: Route.ComponentProps) {
   const handleTryAgain = () => {
     // Reset quiz state first
     resetQuiz();
-    resetShuffledQuestions(category.id);
 
     // Navigate directly
     const firstQuestionUrl = questions.length > 0
@@ -97,7 +96,6 @@ export default function Results({ loaderData }: Route.ComponentProps) {
   const handleBackToHome = () => {
     // Reset quiz state first
     resetQuiz();
-    resetShuffledQuestions(category.id);
 
     // Clear any other relevant session storage items, similar to End Quiz for consistency
     if (typeof window !== 'undefined' && window.sessionStorage) {
