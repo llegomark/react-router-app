@@ -3,7 +3,7 @@ import type { Route } from './+types/terms';
 
 export const meta: Route.MetaFunction = ({ location }) => {
   const url = location.pathname
-  const domain = "https://nqesh.com" // Use your actual domain in production
+  const domain = "https://nqesh.com"
   const fullUrl = `${domain}${url}`
 
   return [
@@ -13,9 +13,15 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:description", content: "View the Terms of Use for the NQESH Reviewer application. Understand your rights and responsibilities when using our platform." },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
+    { property: "og:image", content: `${domain}/og-image.jpg` },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: "NQESH Reviewer Terms of Use" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: "@nqeshreviewer" },
     { name: "twitter:title", content: "NQESH Reviewer - Terms of Use" },
     { name: "twitter:description", content: "View the Terms of Use for the NQESH Reviewer application. Understand your rights and responsibilities when using our platform." },
-    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },
   ];
 };

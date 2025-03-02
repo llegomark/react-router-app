@@ -7,7 +7,7 @@ export const meta: Route.MetaFunction = ({ location }) => {
   const url = location.pathname
   const domain = "https://nqesh.com" // Use your actual domain in production
   const fullUrl = `${domain}${url}`
-  
+
   return [
     { title: "NQESH Reviewer - Frequently Asked Questions" },
     { name: "description", content: "Find answers to common questions about the NQESH Reviewer platform and the National Qualifying Examination for School Heads" },
@@ -15,11 +15,17 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:description", content: "Find answers to common questions about the NQESH Reviewer platform and the National Qualifying Examination for School Heads" },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
+    { property: "og:image", content: `${domain}/og-image.jpg` },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: "NQESH Reviewer FAQ" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: "@nqeshreviewer" },
     { name: "twitter:title", content: "NQESH Reviewer - Frequently Asked Questions" },
     { name: "twitter:description", content: "Find answers to common questions about the NQESH Reviewer platform and the National Qualifying Examination for School Heads" },
-    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },
-    { 
+    {
       "script:ld+json": faq({
         "@context": "https://schema.org",
         "@type": "FAQPage",
@@ -67,8 +73,8 @@ export const meta: Route.MetaFunction = ({ location }) => {
         ]
       })
     }
-  ];
-};
+  ]
+};  
 
 interface FaqItem {
   question: string;

@@ -1,10 +1,9 @@
 import { Link, href } from 'react-router';
 import type { Route } from './+types/pricing';
-import { course } from "@forge42/seo-tools/structured-data/course"; // Import course function
-
+import { course } from "@forge42/seo-tools/structured-data/course";
 export const meta: Route.MetaFunction = ({ location }) => {
   const url = location.pathname
-  const domain = "https://nqesh.com" // Use your actual domain in production
+  const domain = "https://nqesh.com"
   const fullUrl = `${domain}${url}`
 
   return [
@@ -14,12 +13,18 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:description", content: "Choose the right NQESH Reviewer plan for your exam preparation needs. Start free or get comprehensive access with our Pro plan." },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
+    { property: "og:image", content: `${domain}/og-image.jpg` },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: "NQESH Reviewer Pricing Plans" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: "@nqeshreviewer" },
     { name: "twitter:title", content: "NQESH Reviewer - Pricing Plans" },
     { name: "twitter:description", content: "Choose the right NQESH Reviewer plan for your exam preparation needs. Start free or get comprehensive access with our Pro plan." },
-    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },
     {
-      "script:ld+json": course({ // Use course() function for stringification
+      "script:ld+json": course({
         "@context": "https://schema.org",
         "@type": "Course",
         "name": "NQESH Reviewer Pro",
@@ -45,11 +50,10 @@ export const meta: Route.MetaFunction = ({ location }) => {
           "ratingValue": 4.8,
           "reviewCount": 256
         }
-      }) // Let course() function handle stringify
+      })
     }
-  ];
+  ]
 };
-
 
 export default function Pricing() {
   return (

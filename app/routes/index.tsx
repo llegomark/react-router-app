@@ -4,7 +4,7 @@ import type { Route } from './+types/index';
 
 export const meta: Route.MetaFunction = ({ location }) => {
   const url = location.pathname
-  const domain = "https://nqesh.com" // Use your actual domain in production
+  const domain = "https://nqesh.com"
   const fullUrl = `${domain}${url}`
   
   return [

@@ -3,7 +3,7 @@ import type { Route } from './+types/not-found';
 
 export const meta: Route.MetaFunction = ({ location }) => {
   const url = location.pathname
-  const domain = "https://nqesh.com" // Use your actual domain in production
+  const domain = "https://nqesh.com"
   const fullUrl = `${domain}${url}`
 
   return [
@@ -13,15 +13,15 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:description", content: "Oops! The page you are looking for could not be found on NQESH Reviewer. Please check the URL or return to the homepage." },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
-    { property: "og:image", content: `${domain}/og-image.jpg` }, // Added OG Image
-    { property: "og:image:width", content: "1200" },         // Added OG Image width
-    { property: "og:image:height", content: "630" },        // Added OG Image height
-    { property: "og:image:alt", content: "NQESH Reviewer 404 Error Page" }, // Added OG Image alt
-    { name: "twitter:card", content: "summary_large_image" },   // Added Twitter Card type
-    { name: "twitter:site", content: "@nqeshreviewer" },      // Added Twitter site
+    { property: "og:image", content: `${domain}/og-image.jpg` },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: "NQESH Reviewer 404 Error Page" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: "@nqeshreviewer" },
     { name: "twitter:title", content: "NQESH Reviewer - 404 Page Not Found" },
     { name: "twitter:description", content: "Oops! The page you are looking for could not be found on NQESH Reviewer. Please check the URL or return to the homepage." },
-    { name: "twitter:image", content: `${domain}/twitter-image.jpg` }, // Added Twitter Image
+    { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },
   ];
 };

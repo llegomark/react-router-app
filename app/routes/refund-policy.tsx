@@ -3,7 +3,7 @@ import type { Route } from './+types/refund-policy';
 
 export const meta: Route.MetaFunction = ({ location }) => {
   const url = location.pathname
-  const domain = "https://nqesh.com" // Use your actual domain in production
+  const domain = "https://nqesh.com"
   const fullUrl = `${domain}${url}`
 
   return [
@@ -13,13 +13,18 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:description", content: "Review the Refund Policy for NQESH Reviewer Pro subscriptions. Learn about eligibility and process for refunds." },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
+    { property: "og:image", content: `${domain}/og-image.jpg` },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: "NQESH Reviewer Refund Policy" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: "@nqeshreviewer" },
     { name: "twitter:title", content: "NQESH Reviewer - Refund Policy" },
     { name: "twitter:description", content: "Review the Refund Policy for NQESH Reviewer Pro subscriptions. Learn about eligibility and process for refunds." },
-    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },
   ];
 };
-
 
 export default function RefundPolicy() {
   return (

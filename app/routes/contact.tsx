@@ -7,9 +7,9 @@ import type { Route } from './+types/contact';
 
 export const meta: Route.MetaFunction = ({ location }) => {
   const url = location.pathname
-  const domain = "https://nqesh.com" // Use your actual domain in production
+  const domain = "https://nqesh.com"
   const fullUrl = `${domain}${url}`
-  
+
   return [
     { title: "NQESH Reviewer - Contact Us" },
     { name: "description", content: "Contact the NQESH Reviewer team for support, feedback, or inquiries about our exam preparation platform" },
@@ -17,11 +17,17 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:description", content: "Contact the NQESH Reviewer team for support, feedback, or inquiries about our exam preparation platform" },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
+    { property: "og:image", content: `${domain}/og-image.jpg` },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: "NQESH Reviewer Contact Us" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: "@nqeshreviewer" },
     { name: "twitter:title", content: "NQESH Reviewer - Contact Us" },
     { name: "twitter:description", content: "Contact the NQESH Reviewer team for support, feedback, or inquiries about our exam preparation platform" },
-    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },
-    { 
+    {
       "script:ld+json": organization({
         "@context": "https://schema.org",
         "@type": "Organization",
@@ -39,7 +45,7 @@ export const meta: Route.MetaFunction = ({ location }) => {
         }
       })
     }
-  ];
+  ]
 };
 
 // Define Zod schema for form validation

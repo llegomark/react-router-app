@@ -4,38 +4,66 @@ import type { Route } from './+types/deped-order';
 
 export const meta: Route.MetaFunction = ({ location }) => {
   const url = location.pathname
-  const domain = "https://nqesh.com" // Use your actual domain in production
+  const domain = "https://nqesh.com"
   const fullUrl = `${domain}${url}`
-  
+
   return [
-    { title: "NQESH Reviewer - DepEd Orders" },
-    { name: "description", content: "Browse Department of Education Orders relevant for the National Qualifying Examination for School Heads (NQESH)" },
-    { property: "og:title", content: "NQESH Reviewer - DepEd Orders" },
-    { property: "og:description", content: "Browse Department of Education Orders relevant for the National Qualifying Examination for School Heads (NQESH)" },
+    { title: "NQESH Reviewer - DepEd Orders: NQESH Relevant Education Orders" },
+    { name: "description", content: "Browse a curated dataset of Department of Education Orders relevant for the National Qualifying Examination for School Heads (NQESH). Access official guidelines and policies." },
+    { property: "og:title", content: "NQESH Reviewer - DepEd Orders: NQESH Relevant Education Orders" },
+    { property: "og:description", content: "Browse a curated dataset of Department of Education Orders relevant for the National Qualifying Examination for School Heads (NQESH). Access official guidelines and policies." },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
-    { name: "twitter:title", content: "NQESH Reviewer - DepEd Orders" },
-    { name: "twitter:description", content: "Browse Department of Education Orders relevant for the National Qualifying Examination for School Heads (NQESH)" },
+    { property: "og:image", content: `${domain}/og-image.jpg` },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: "NQESH Reviewer DepEd Orders Dataset" },
     { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: "@nqeshreviewer" },
+    { name: "twitter:title", content: "NQESH Reviewer - DepEd Orders: NQESH Relevant Education Orders" },
+    { name: "twitter:description", content: "Browse a curated dataset of Department of Education Orders relevant for the National Qualifying Examination for School Heads (NQESH). Access official guidelines and policies." },
+    { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },
-    { 
+    {
       "script:ld+json": dataset({
         "@context": "https://schema.org",
         "@type": "Dataset",
-        "name": "Department of Education Orders for NQESH",
-        "description": "Collection of Department of Education Orders relevant to the National Qualifying Examination for School Heads in the Philippines",
-        "keywords": ["NQESH", "DepEd Orders", "Department of Education", "School Heads", "Education Policy"],
+        "name": "DepEd Orders Relevant to NQESH - NQESH Reviewer",
+        "alternateName": "DepEd Orders for NQESH",
+        "description": "A curated and searchable dataset of Department of Education (DepEd) Orders in the Philippines that are relevant to the National Qualifying Examination for School Heads (NQESH). This dataset helps educators access official guidelines, policies, and issuances pertinent to school leadership and management.", // More detailed description
+        "keywords": ["NQESH", "DepEd Orders", "Department of Education", "Philippines", "Education Policy", "School Heads", "Guidelines", "Policies"], // More comprehensive keywords
         "url": fullUrl,
         "creator": {
           "@type": "Organization",
           "name": "NQESH Reviewer",
           "url": "https://nqesh.com"
         },
-        "temporalCoverage": "2019/2023"
+        "publisher": {
+          "@type": "Organization",
+          "name": "NQESH Reviewer",
+          "url": "https://nqesh.com"
+        },
+        "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "isAccessibleForFree": true,
+        "temporalCoverage": "2019/2023",
+        "distribution": [
+          {
+            "@type": "DataDownload",
+            "contentUrl": fullUrl,
+            "encodingFormat": "HTML",
+            "description": "Browse and view DepEd Orders online"
+          }
+        ],
+        "variableMeasured": "Department of Education Orders",
+        "includedInDataCatalog": {
+          "@type": "DataCatalog",
+          "name": "NQESH Reviewer - DepEd Orders Collection"
+        }
       })
     }
   ];
 };
+
 
 interface DepEdOrder {
   id: number;
