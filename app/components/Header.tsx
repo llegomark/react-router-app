@@ -27,32 +27,32 @@ export default function Header() {
           <nav className="w-full">
             <ul className="flex flex-wrap justify-center gap-6">
               <li>
-                <Link to={href("/")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                <Link prefetch="render" to={href("/")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to={href("/reviewer")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                <Link prefetch="render" to={href("/reviewer")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   Reviewer
                 </Link>
               </li>
               <li>
-                <Link to={href("/pricing")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                <Link prefetch="render" to={href("/pricing")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   Pricing
                 </Link>
               </li>
               <li>
-                <Link to={href("/faq")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                <Link prefetch="render" to={href("/faq")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link to={href("/about")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                <Link prefetch="render" to={href("/about")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   About
                 </Link>
               </li>
               <li>
-                <Link to={href("/contact")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                <Link prefetch="render" to={href("/contact")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   Contact
                 </Link>
               </li>
@@ -100,7 +100,7 @@ export default function Header() {
           <nav className="md:hidden mt-4 border-t border-gray-200 dark:border-gray-800 pt-4" id="mobile-menu">
             <ul className="flex flex-col space-y-3">
               <li>
-                <Link
+                <Link prefetch="viewport"
                   to={href("/")}
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
@@ -109,7 +109,7 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link
+                <Link prefetch="viewport"
                   to={href("/reviewer")}
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
@@ -118,7 +118,7 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link
+                <Link prefetch="viewport"
                   to={href("/pricing")}
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
@@ -127,7 +127,7 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link
+                <Link prefetch="viewport"
                   to={href("/faq")}
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
@@ -136,7 +136,7 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link
+                <Link prefetch="viewport"
                   to={href("/about")}
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
@@ -145,7 +145,7 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link
+                <Link prefetch="viewport"
                   to={href("/contact")}
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
