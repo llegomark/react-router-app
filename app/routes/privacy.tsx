@@ -1,10 +1,22 @@
 import { Link, href } from 'react-router';
 import type { Route } from './+types/privacy';
 
-export const meta: Route.MetaFunction = () => {
+export const meta: Route.MetaFunction = ({ location }) => {
+  const url = location.pathname
+  const domain = "https://nqesh.com" // Use your actual domain in production
+  const fullUrl = `${domain}${url}`
+
   return [
     { title: "NQESH Reviewer - Privacy Policy" },
-    { name: "description", content: "Privacy Policy for the NQESH Reviewer application" },
+    { name: "description", content: "Read the Privacy Policy for NQESH Reviewer to understand how we protect your personal information and data." },
+    { property: "og:title", content: "NQESH Reviewer - Privacy Policy" },
+    { property: "og:description", content: "Read the Privacy Policy for NQESH Reviewer to understand how we protect your personal information and data." },
+    { property: "og:url", content: fullUrl },
+    { property: "og:type", content: "website" },
+    { name: "twitter:title", content: "NQESH Reviewer - Privacy Policy" },
+    { name: "twitter:description", content: "Read the Privacy Policy for NQESH Reviewer to understand how we protect your personal information and data." },
+    { name: "twitter:card", content: "summary_large_image" },
+    { rel: "canonical", href: fullUrl },
   ];
 };
 

@@ -3,17 +3,39 @@ import { useNavigate, redirect, data } from 'react-router';
 import { useQuizStore } from '~/store/quizStore';
 import type { Route } from './+types/question';
 
-export const meta: Route.MetaFunction = ({ data }) => {
-  if (!data?.category) {
-    return [
-      { title: "Quiz - Error" },
-      { name: "description", content: "Question not found" },
-    ];
+export const meta: Route.MetaFunction = ({ data, location }) => {
+  const url = location.pathname
+  const domain = "https://nqesh.com" // Use your actual domain in production
+  const fullUrl = `${domain}${url}`
+
+  let title = "Quiz - Question";
+  let description = "Answer the quiz question";
+
+  if (data?.category) {
+    title = `NQESH Reviewer - ${data.category.name} - Question ${data.currentQuestionNumber}`;
+    description = `Answer question ${data.currentQuestionNumber} in the ${data.category.name} category for your NQESH exam preparation.`;
+  } else {
+    title = "NQESH Reviewer - Quiz - Error";
+    description = "Error: Question not found for NQESH Reviewer Quiz.";
   }
 
   return [
-    { title: `${data.category.name} - Question ${data.currentQuestionNumber}` },
-    { name: "description", content: "Answer the quiz question" },
+    { title: title },
+    { name: "description", content: description },
+    { property: "og:title", content: title },
+    { property: "og:description", content: description },
+    { property: "og:url", content: fullUrl },
+    { property: "og:type", content: "website" },
+    { property: "og:image", content: `${domain}/og-image.jpg` }, // Added OG Image
+    { property: "og:image:width", content: "1200" },         // Added OG Image width
+    { property: "og:image:height", content: "630" },        // Added OG Image height
+    { property: "og:image:alt", content: "NQESH Reviewer Quiz Question" }, // Added OG Image alt
+    { name: "twitter:card", content: "summary_large_image" },   // Added Twitter Card type
+    { name: "twitter:site", content: "@nqeshreviewer" },      // Added Twitter site
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: `${domain}/twitter-image.jpg` }, // Added Twitter Image
+    { rel: "canonical", href: fullUrl },
   ];
 };
 

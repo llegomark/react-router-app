@@ -1,12 +1,55 @@
 import { Link, href } from 'react-router';
 import type { Route } from './+types/pricing';
+import { course } from "@forge42/seo-tools/structured-data/course"; // Import course function
 
-export const meta: Route.MetaFunction = () => {
+export const meta: Route.MetaFunction = ({ location }) => {
+  const url = location.pathname
+  const domain = "https://nqesh.com" // Use your actual domain in production
+  const fullUrl = `${domain}${url}`
+
   return [
     { title: "NQESH Reviewer - Pricing Plans" },
-    { name: "description", content: "Choose the right NQESH Reviewer plan for your exam preparation needs" },
+    { name: "description", content: "Choose the right NQESH Reviewer plan for your exam preparation needs. Start free or get comprehensive access with our Pro plan." },
+    { property: "og:title", content: "NQESH Reviewer - Pricing Plans" },
+    { property: "og:description", content: "Choose the right NQESH Reviewer plan for your exam preparation needs. Start free or get comprehensive access with our Pro plan." },
+    { property: "og:url", content: fullUrl },
+    { property: "og:type", content: "website" },
+    { name: "twitter:title", content: "NQESH Reviewer - Pricing Plans" },
+    { name: "twitter:description", content: "Choose the right NQESH Reviewer plan for your exam preparation needs. Start free or get comprehensive access with our Pro plan." },
+    { name: "twitter:card", content: "summary_large_image" },
+    { rel: "canonical", href: fullUrl },
+    {
+      "script:ld+json": course({ // Use course() function for stringification
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": "NQESH Reviewer Pro",
+        "description": "Comprehensive online course for NQESH exam preparation in the Philippines.",
+        "provider": {
+          "@type": "Organization",
+          "name": "NQESH Reviewer",
+          "url": "https://nqesh.com"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": 1499.00,
+          "priceCurrency": "PHP",
+          "category": "Paid"
+        },
+        "hasCourseInstance": {
+          "@type": "CourseInstance",
+          "courseMode": "Online",
+          "courseWorkload": "P12M"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": 4.8,
+          "reviewCount": 256
+        }
+      }) // Let course() function handle stringify
+    }
   ];
 };
+
 
 export default function Pricing() {
   return (

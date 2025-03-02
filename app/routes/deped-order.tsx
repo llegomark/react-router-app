@@ -1,11 +1,39 @@
+import { dataset } from "@forge42/seo-tools/structured-data/dataset"
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router';
 import type { Route } from './+types/deped-order';
 
-export const meta: Route.MetaFunction = () => {
+export const meta: Route.MetaFunction = ({ location }) => {
+  const url = location.pathname
+  const domain = "https://nqesh.com" // Use your actual domain in production
+  const fullUrl = `${domain}${url}`
+  
   return [
     { title: "NQESH Reviewer - DepEd Orders" },
-    { name: "description", content: "Browse Department of Education Orders relevant for NQESH examination" },
+    { name: "description", content: "Browse Department of Education Orders relevant for the National Qualifying Examination for School Heads (NQESH)" },
+    { property: "og:title", content: "NQESH Reviewer - DepEd Orders" },
+    { property: "og:description", content: "Browse Department of Education Orders relevant for the National Qualifying Examination for School Heads (NQESH)" },
+    { property: "og:url", content: fullUrl },
+    { property: "og:type", content: "website" },
+    { name: "twitter:title", content: "NQESH Reviewer - DepEd Orders" },
+    { name: "twitter:description", content: "Browse Department of Education Orders relevant for the National Qualifying Examination for School Heads (NQESH)" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { rel: "canonical", href: fullUrl },
+    { 
+      "script:ld+json": dataset({
+        "@context": "https://schema.org",
+        "@type": "Dataset",
+        "name": "Department of Education Orders for NQESH",
+        "description": "Collection of Department of Education Orders relevant to the National Qualifying Examination for School Heads in the Philippines",
+        "keywords": ["NQESH", "DepEd Orders", "Department of Education", "School Heads", "Education Policy"],
+        "url": fullUrl,
+        "creator": {
+          "@type": "Organization",
+          "name": "NQESH Reviewer",
+          "url": "https://nqesh.com"
+        },
+        "temporalCoverage": "2019/2023"
+      })
+    }
   ];
 };
 

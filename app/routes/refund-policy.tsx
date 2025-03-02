@@ -1,12 +1,25 @@
 import { Link, href } from 'react-router';
 import type { Route } from './+types/refund-policy';
 
-export const meta: Route.MetaFunction = () => {
+export const meta: Route.MetaFunction = ({ location }) => {
+  const url = location.pathname
+  const domain = "https://nqesh.com" // Use your actual domain in production
+  const fullUrl = `${domain}${url}`
+
   return [
     { title: "NQESH Reviewer - Refund Policy" },
-    { name: "description", content: "Our refund policy for NQESH Reviewer Pro subscriptions" },
+    { name: "description", content: "Review the Refund Policy for NQESH Reviewer Pro subscriptions. Learn about eligibility and process for refunds." },
+    { property: "og:title", content: "NQESH Reviewer - Refund Policy" },
+    { property: "og:description", content: "Review the Refund Policy for NQESH Reviewer Pro subscriptions. Learn about eligibility and process for refunds." },
+    { property: "og:url", content: fullUrl },
+    { property: "og:type", content: "website" },
+    { name: "twitter:title", content: "NQESH Reviewer - Refund Policy" },
+    { name: "twitter:description", content: "Review the Refund Policy for NQESH Reviewer Pro subscriptions. Learn about eligibility and process for refunds." },
+    { name: "twitter:card", content: "summary_large_image" },
+    { rel: "canonical", href: fullUrl },
   ];
 };
+
 
 export default function RefundPolicy() {
   return (

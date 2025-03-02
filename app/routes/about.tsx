@@ -1,12 +1,50 @@
 import { Link, href } from 'react-router';
 import type { Route } from './+types/about';
+import { organization } from "@forge42/seo-tools/structured-data/organization"
 
-export const meta: Route.MetaFunction = () => {
+export const meta: Route.MetaFunction = ({ location }) => {
+  const url = location.pathname
+  const domain = "https://nqesh.com" // Use your actual domain in production
+  const fullUrl = `${domain}${url}`
+  
+  // Return an array of meta tags as expected by React Router v7
   return [
     { title: "NQESH Reviewer - About Us" },
-    { name: "description", content: "Learn more about the NQESH Reviewer application" },
-  ];
-};
+    { name: "description", content: "Learn more about the NQESH Reviewer application and our mission to help educators prepare for the National Qualifying Examination for School Heads" },
+    { property: "og:title", content: "NQESH Reviewer - About Us" },
+    { property: "og:description", content: "Learn more about the NQESH Reviewer application and our mission to help educators prepare for the National Qualifying Examination for School Heads" },
+    { property: "og:url", content: fullUrl },
+    { property: "og:type", content: "website" },
+    { name: "twitter:title", content: "NQESH Reviewer - About Us" },
+    { name: "twitter:description", content: "Learn more about the NQESH Reviewer application and our mission to help educators prepare for the National Qualifying Examination for School Heads" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { rel: "canonical", href: fullUrl },
+    { 
+      "script:ld+json": organization({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "url": "https://nqesh.com",
+        "sameAs": [
+          "https://facebook.com/nqeshreviewer", 
+          "https://twitter.com/nqeshreviewer"
+        ],
+        "logo": "https://nqesh.com/logo.png",
+        "name": "NQESH Reviewer",
+        "description": "Comprehensive preparation platform for the National Qualifying Examination for School Heads in the Philippines",
+        "email": "support@nqesh.com",
+        "telephone": "+63-926-021-1602",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Education Street",
+          "addressLocality": "Manila",
+          "addressCountry": "PH",
+          "addressRegion": "Metro Manila",
+          "postalCode": "1000"
+        }
+      })
+    }
+  ]
+}
 
 export default function AboutUs() {
   return (
