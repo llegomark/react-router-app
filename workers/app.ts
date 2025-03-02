@@ -114,7 +114,7 @@ async function generateSitemap(env: CloudflareEnvironment): Promise<string> {
     sitemap += `
       <url>
         <loc>${baseUrl}/category/${category.id}</loc>
-        <changefreq>weekly</changefreq>
+        <changefreq>daily</changefreq>
         <priority>0.8</priority>
       </url>`;
 
@@ -126,8 +126,8 @@ async function generateSitemap(env: CloudflareEnvironment): Promise<string> {
       sitemap += `
         <url>
           <loc>${baseUrl}/category/${category.id}/${question.id}</loc>
-          <changefreq>weekly</changefreq>
-          <priority>0.7</priority>
+          <changefreq>daily</changefreq>
+          <priority>1.0</priority>
         </url>`;
     }
 
@@ -172,7 +172,7 @@ export default {
         return new Response(sitemap, {
           headers: {
             "Content-Type": "application/xml",
-            "Cache-Control": "max-age=86400", // Cache for 24 hours
+            "Cache-Control": "max-age=3600", // Cache for 1 hour (reduced due to daily update)
           },
         });
       } catch (error) {
