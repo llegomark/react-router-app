@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, redirect, data } from 'react-router';
 import { useQuizStore } from '~/store/quizStore';
 import type { Route } from './+types/question';
@@ -135,6 +135,8 @@ export default function Question({ loaderData }: Route.ComponentProps) {
   } = loaderData as LoaderData;
 
   const navigate = useNavigate();
+  const [isVerified, setIsVerified] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const {
     timeRemaining,
@@ -152,6 +154,44 @@ export default function Question({ loaderData }: Route.ComponentProps) {
 
   const selectedAnswer = selectedAnswers[question.id] ?? null;
   const hasAnswered = selectedAnswer !== null;
+
+  // Check if user has completed Turnstile verification
+  useEffect(() => {
+    // Check verification status
+    const checkVerification = () => {
+      try {
+        const verificationData = localStorage.getItem('turnstile_verified');
+        
+        if (!verificationData) {
+          setIsVerified(false);
+          setIsLoading(false);
+          return;
+        }
+        
+        setIsVerified(true);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error checking verification status:", error);
+        setIsVerified(false);
+        setIsLoading(false);
+      }
+    };
+    
+    checkVerification();
+  }, []);
+
+  // If verification status has been determined and user is not verified, redirect
+  useEffect(() => {
+    if (isVerified === false && !isLoading) {
+      // Redirect to reviewer page
+      navigate('/reviewer', { 
+        state: { 
+          redirectReason: 'verification_required',
+          returnPath: window.location.pathname
+        }
+      });
+    }
+  }, [isVerified, isLoading, navigate]);
 
   // Set current category when component mounts or category changes
   useEffect(() => {
@@ -240,6 +280,19 @@ export default function Question({ loaderData }: Route.ComponentProps) {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
+  // Show loading state while checking verification
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
+        <div className="text-center p-8">
+          <div className="animate-spin h-10 w-10 mx-auto mb-4 border-4 border-blue-600 dark:border-blue-400 border-t-transparent rounded-full"></div>
+          <p className="text-gray-700 dark:text-gray-300">Loading question...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Main content is only shown if user is verified
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-8 md:py-12">
       <div className="container mx-auto px-4 max-w-2xl">
