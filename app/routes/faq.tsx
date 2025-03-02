@@ -254,8 +254,8 @@ export default function FAQ() {
     },
   ];
 
-  const filteredFaqs = activeCategory === "all" 
-    ? faqItems 
+  const filteredFaqs = activeCategory === "all"
+    ? faqItems
     : faqItems.filter(item => item.category === activeCategory);
 
   return (
@@ -274,51 +274,51 @@ export default function FAQ() {
           <div className="flex flex-wrap justify-center mb-8 gap-2">
             <button
               onClick={() => setActiveCategory("all")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeCategory === "all"
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer
+                ${activeCategory === "all"
                   ? "bg-blue-600 text-white"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-              }`}
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white" /* Added dark mode hover text color */
+                }`}
             >
               All Questions
             </button>
             <button
               onClick={() => setActiveCategory("nqesh")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeCategory === "nqesh"
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer
+                ${activeCategory === "nqesh"
                   ? "bg-blue-600 text-white"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-              }`}
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white" /* Added dark mode hover text color */
+                }`}
             >
               About NQESH
             </button>
             <button
               onClick={() => setActiveCategory("platform")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeCategory === "platform"
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer
+                ${activeCategory === "platform"
                   ? "bg-blue-600 text-white"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-              }`}
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white" /* Added dark mode hover text color */
+                }`}
             >
               Our Platform
             </button>
             <button
               onClick={() => setActiveCategory("subscription")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeCategory === "subscription"
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer
+                ${activeCategory === "subscription"
                   ? "bg-blue-600 text-white"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-              }`}
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white" /* Added dark mode hover text color */
+                }`}
             >
               Subscriptions & Payments
             </button>
             <button
               onClick={() => setActiveCategory("support")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeCategory === "support"
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer
+                ${activeCategory === "support"
                   ? "bg-blue-600 text-white"
-                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-              }`}
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white" /* Added dark mode hover text color */
+                }`}
             >
               Technical Support
             </button>
@@ -327,23 +327,23 @@ export default function FAQ() {
           {/* FAQ accordions */}
           <div className="space-y-4">
             {filteredFaqs.map((faq, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
               >
                 <button
                   onClick={() => toggleItem(index)}
-                  className="w-full text-left p-4 flex justify-between items-center bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  className="w-full text-left p-4 flex justify-between items-center bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
                 >
                   <span className="font-medium text-gray-900 dark:text-white">{faq.question}</span>
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    className={`h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform ${openItem === index ? 'transform rotate-180' : ''}`} 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={`h-5 w-5 text-gray-500 dark:text-gray-400 transition-transform ${openItem === index ? 'transform rotate-180' : ''}`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
                     strokeLinejoin="round"
                   >
                     <polyline points="6 9 12 15 18 9"></polyline>
@@ -366,9 +366,9 @@ export default function FAQ() {
             <p className="text-gray-700 dark:text-gray-300 mb-4">
               If you have additional questions or need further assistance, please don't hesitate to contact our support team.
             </p>
-            <Link 
+            <Link
               to="/contact"
-              className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+              className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors cursor-pointer"
             >
               Contact Support
             </Link>

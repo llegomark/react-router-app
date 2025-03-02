@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import type { Route } from './+types/deped-orders';
+import type { Route } from './+types/deped-order';
 
 export const meta: Route.MetaFunction = () => {
   return [

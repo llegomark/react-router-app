@@ -97,7 +97,7 @@ export default function Pricing() {
 
             {/* Pro Plan */}
             <div className="bg-blue-600 dark:bg-blue-800 rounded-xl p-8 border border-blue-500 dark:border-blue-700 flex flex-col relative overflow-hidden">
-              <div className="absolute right-0 top-0 bg-yellow-400 text-yellow-800 text-xs font-bold px-3 py-1 transform translate-x-7 translate-y-4 rotate-45">
+              <div className="absolute top-4 right-4 bg-yellow-400 text-yellow-800 text-xs font-bold px-3 py-1 rounded">
                 BEST VALUE
               </div>
               <div className="mb-6">
