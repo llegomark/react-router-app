@@ -1,13 +1,12 @@
-// app/components/Header.tsx
-import { Link } from 'react-router';
-import { useState } from 'react';
+import { Link, href } from 'react-router';
+import { useState, useCallback } from 'react';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
+  const toggleMenu = useCallback(() => {
     setIsMenuOpen(!isMenuOpen);
-  };
+  }, [setIsMenuOpen]);
 
   return (
     <header className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800">
@@ -17,7 +16,7 @@ export default function Header() {
           <div className="flex flex-col items-center mb-4">
             <span className="text-4xl mb-2" aria-hidden="true">🏫</span>
             <div className="text-center">
-              <Link to="/" className="text-3xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              <Link to={href("/")} className="text-3xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 NQESH Reviewer
               </Link>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -28,32 +27,32 @@ export default function Header() {
           <nav className="w-full">
             <ul className="flex flex-wrap justify-center gap-6">
               <li>
-                <Link to="/" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                <Link to={href("/")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/reviewer" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                <Link to={href("/reviewer")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   Reviewer
                 </Link>
               </li>
               <li>
-                <Link to="/pricing" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                <Link to={href("/pricing")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   Pricing
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                <Link to={href("/faq")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                <Link to={href("/about")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   About
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
+                <Link to={href("/contact")} className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1">
                   Contact
                 </Link>
               </li>
@@ -66,7 +65,7 @@ export default function Header() {
           <div className="flex items-center">
             <span className="text-4xl mr-3" aria-hidden="true">🏫</span>
             <div>
-              <Link to="/" className="text-3xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              <Link to={href("/")} className="text-3xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 NQESH Reviewer
               </Link>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -74,9 +73,9 @@ export default function Header() {
               </p>
             </div>
           </div>
-          
+
           {/* Mobile menu button */}
-          <button 
+          <button
             type="button"
             className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
             onClick={toggleMenu}
@@ -101,8 +100,8 @@ export default function Header() {
           <nav className="md:hidden mt-4 border-t border-gray-200 dark:border-gray-800 pt-4" id="mobile-menu">
             <ul className="flex flex-col space-y-3">
               <li>
-                <Link 
-                  to="/" 
+                <Link
+                  to={href("/")}
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -110,8 +109,8 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/reviewer" 
+                <Link
+                  to={href("/reviewer")}
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -119,8 +118,8 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/pricing" 
+                <Link
+                  to={href("/pricing")}
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -128,8 +127,8 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/faq" 
+                <Link
+                  to={href("/faq")}
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -137,8 +136,8 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/about" 
+                <Link
+                  to={href("/about")}
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -146,8 +145,8 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  to="/contact" 
+                <Link
+                  to={href("/contact")}
                   className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >

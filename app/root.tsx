@@ -51,14 +51,6 @@ export default function App() {
 
   return (
     <>
-      {isGlobalLoading && (
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-100/75 dark:bg-gray-900/75 z-50 flex justify-center items-center backdrop-blur-xs">
-          <div className="relative">
-            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-            <div className="mt-4 text-blue-600 dark:text-blue-400 font-medium text-center">Loading...</div>
-          </div>
-        </div>
-      )}
       <div className="flex flex-col min-h-screen">
         <Header />
         <main className="flex-grow">

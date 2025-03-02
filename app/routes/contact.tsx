@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, data, useSubmit } from 'react-router';
+import { Link, data, useSubmit, href } from 'react-router';
 import { z } from 'zod';
 import { contactSubmissions } from '~/database/schema';
 import type { Route } from './+types/contact';
@@ -329,7 +329,7 @@ export default function Contact({ actionData }: Route.ComponentProps) {
                   <label htmlFor="privacyPolicy" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                     I agree to the{" "}
                     <Link
-                      to="/privacy"
+                      to={href("/privacy")}
                       className="text-blue-600 dark:text-blue-400 hover:underline"
                     >
                       Privacy Policy

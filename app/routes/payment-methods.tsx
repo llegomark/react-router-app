@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, href } from 'react-router';
 import type { Route } from './+types/payment-methods';
 
 export const meta: Route.MetaFunction = () => {
@@ -283,19 +283,19 @@ export default function PaymentMethods() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                  to="/contact"
+                  to={href("/contact")}
                   className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
                 >
                   Contact Support
                 </Link>
                 <Link
-                  to="/faq"
+                  to={href("/faq")}
                   className="px-5 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium transition-colors"
                 >
                   View FAQ
                 </Link>
                 <Link
-                  to="/refund-policy"
+                  to={href("/refund-policy")}
                   className="px-5 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium transition-colors"
                 >
                   Refund Policy

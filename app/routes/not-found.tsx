@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, href } from 'react-router';
 import type { Route } from './+types/not-found';
 
 export const meta: Route.MetaFunction = () => {
@@ -22,7 +22,7 @@ export default function NotFound() {
         
         <div className="flex flex-col md:flex-row gap-4 justify-center">
           <Link 
-            to="/"
+            to={href("/")}
             className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
           >
             Go to Home

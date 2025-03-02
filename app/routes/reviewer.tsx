@@ -1,4 +1,4 @@
-import { Link, data } from 'react-router';
+import { Link, data, href } from 'react-router';
 import type { Route } from './+types/reviewer';
 
 export const meta: Route.MetaFunction = () => {
@@ -70,7 +70,7 @@ export default function Reviewer({ loaderData }: Route.ComponentProps) {
             </div>
             <p className="mb-4 text-gray-700 dark:text-gray-300">After migration, you can seed the database with sample data:</p>
             <Link 
-              to="/seed" 
+              to={href("/seed")}
               className="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg inline-block font-medium transition-colors"
             >
               Go to Seed Page
@@ -80,7 +80,7 @@ export default function Reviewer({ loaderData }: Route.ComponentProps) {
           <div className="text-center p-8 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
             <p className="mb-6 text-gray-700 dark:text-gray-300">No quiz categories found. Please seed the database first.</p>
             <Link 
-              to="/seed" 
+              to={href("/seed")} 
               className="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg inline-block font-medium transition-colors cursor-pointer"
             >
               Go to Seed Page
@@ -89,9 +89,9 @@ export default function Reviewer({ loaderData }: Route.ComponentProps) {
         ) : (
           <div className="grid gap-4">
             {categories.map((category: Category) => (
-              <Link 
-                key={category.id} 
-                to={`/category/${category.id}/1`}
+              <Link
+                key={category.id}
+                to={href("/category/:categoryId/:questionId", { categoryId: String(category.id), questionId: "1" })}
                 className="block p-6 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 hover:shadow-md hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 cursor-pointer"
               >
                 <div className="flex items-center">

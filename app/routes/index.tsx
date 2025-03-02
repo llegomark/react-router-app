@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, href } from 'react-router';
 import type { Route } from './+types/index';
 
 export const meta: Route.MetaFunction = () => {
@@ -28,13 +28,13 @@ export default function Landing() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link 
-                  to="/reviewer" 
+                  to={href("/reviewer")}
                   className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors text-center"
                 >
                   Start Reviewing
                 </Link>
                 <Link 
-                  to="/about" 
+                  to={href("/about")}
                   className="px-6 py-3 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg font-medium transition-colors text-center"
                 >
                   Learn More

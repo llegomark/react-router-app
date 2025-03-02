@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, href } from 'react-router';
 import type { Route } from './+types/refund-policy';
 
 export const meta: Route.MetaFunction = () => {
@@ -148,7 +148,7 @@ export default function RefundPolicy() {
 
             <div className="flex justify-center mt-8 pt-4 border-t border-gray-200 dark:border-gray-800">
               <Link
-                to="/pricing"
+                to={href("/pricing")}
                 className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
               >
                 View Pricing Plans

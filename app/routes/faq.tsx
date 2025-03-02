@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, href } from 'react-router';
 import type { Route } from './+types/faq';
 
 export const meta: Route.MetaFunction = () => {
@@ -98,12 +98,12 @@ export default function FAQ() {
         <div>
           <p>Getting started with NQESH Reviewer is easy:</p>
           <ol className="list-decimal list-inside mt-2 space-y-1">
-            <li>Visit our <Link to="/reviewer" className="text-blue-600 dark:text-blue-400 hover:underline">Reviewer page</Link></li>
+            <li>Visit our <Link to={href("/reviewer")} className="text-blue-600 dark:text-blue-400 hover:underline">Reviewer page</Link></li>
             <li>Browse the available categories</li>
             <li>Select a category to begin practicing questions</li>
             <li>Answer questions and review your results</li>
           </ol>
-          <p className="mt-2">You can start using our free plan right away without any registration. If you'd like access to all categories and premium features, you can upgrade to our Pro plan by visiting our <Link to="/pricing" className="text-blue-600 dark:text-blue-400 hover:underline">Pricing page</Link>.</p>
+          <p className="mt-2">You can start using our free plan right away without any registration. If you'd like access to all categories and premium features, you can upgrade to our Pro plan by visiting our <Link to={href("/pricing")} className="text-blue-600 dark:text-blue-400 hover:underline">Pricing page</Link>.</p>
         </div>
       ),
       category: "platform"
@@ -152,7 +152,7 @@ export default function FAQ() {
             <li>AI-powered study recommendations</li>
             <li>Priority email support</li>
           </ul>
-          <p className="mt-2">Pro plan subscribers receive 12 months of access from the date of purchase. You can view full plan details on our <Link to="/pricing" className="text-blue-600 dark:text-blue-400 hover:underline">Pricing page</Link>.</p>
+          <p className="mt-2">Pro plan subscribers receive 12 months of access from the date of purchase. You can view full plan details on our <Link to={href("/pricing")} className="text-blue-600 dark:text-blue-400 hover:underline">Pricing page</Link>.</p>
         </div>
       ),
       category: "subscription"
@@ -178,7 +178,7 @@ export default function FAQ() {
             <li>Maya</li>
             <li>Bank Transfer (BDO, BPI, UnionBank, Metrobank)</li>
           </ul>
-          <p className="mt-2">For details on how to make a payment and account activation procedures, please visit our <Link to="/payment-methods" className="text-blue-600 dark:text-blue-400 hover:underline">Payment Methods page</Link>.</p>
+          <p className="mt-2">For details on how to make a payment and account activation procedures, please visit our <Link to={href("/payment-methods")} className="text-blue-600 dark:text-blue-400 hover:underline">Payment Methods page</Link>.</p>
         </div>
       ),
       category: "subscription"
@@ -189,7 +189,7 @@ export default function FAQ() {
         <div>
           <p>Yes, we offer a 7-day money-back guarantee for the Pro plan. If you're not satisfied with your subscription within the first 7 days after purchase, you can request a full refund.</p>
           <p className="mt-2">After the initial 7-day period, refunds are evaluated on a case-by-case basis and are typically only provided in exceptional circumstances.</p>
-          <p className="mt-2">For detailed information about our refund policy, please visit our <Link to="/refund-policy" className="text-blue-600 dark:text-blue-400 hover:underline">Refund Policy page</Link>.</p>
+          <p className="mt-2">For detailed information about our refund policy, please visit our <Link to={href("/refund-policy")} className="text-blue-600 dark:text-blue-400 hover:underline">Refund Policy page</Link>.</p>
         </div>
       ),
       category: "subscription"
@@ -215,7 +215,7 @@ export default function FAQ() {
             <li>Try refreshing your browser or clearing your cache</li>
             <li>Ensure you're using a supported browser (Chrome, Firefox, Safari, or Edge)</li>
             <li>Check if your internet connection is stable</li>
-            <li>If the issue persists, contact our support team via the <Link to="/contact" className="text-blue-600 dark:text-blue-400 hover:underline">Contact page</Link></li>
+            <li>If the issue persists, contact our support team via the <Link to={href("/contact")} className="text-blue-600 dark:text-blue-400 hover:underline">Contact page</Link></li>
           </ol>
           <p className="mt-2">When reporting an issue, please provide as much detail as possible, including the device type, browser version, and a screenshot or description of the error you're experiencing. This helps us resolve your issue more quickly.</p>
         </div>
@@ -228,7 +228,7 @@ export default function FAQ() {
         <div>
           <p>You can contact our support team by:</p>
           <ul className="list-disc list-inside mt-2 space-y-1">
-            <li>Filling out the form on our <Link to="/contact" className="text-blue-600 dark:text-blue-400 hover:underline">Contact page</Link></li>
+            <li>Filling out the form on our <Link to={href("/contact")} className="text-blue-600 dark:text-blue-400 hover:underline">Contact page</Link></li>
             <li>Emailing us directly at support@nqesh.com</li>
           </ul>
           <p className="mt-2">Pro plan subscribers receive priority support with faster response times, typically within 24 hours on business days. Free plan users can expect responses within 48-72 hours.</p>

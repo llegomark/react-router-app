@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, href } from 'react-router';
 import type { Route } from './+types/pricing';
 
 export const meta: Route.MetaFunction = () => {
@@ -88,7 +88,7 @@ export default function Pricing() {
               </ul>
 
               <Link
-                to="/reviewer"
+                to={href("/reviewer")}
                 className="w-full py-3 px-6 text-center bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-blue-600 dark:text-blue-400 font-medium border border-blue-200 dark:border-blue-800 rounded-lg transition-colors"
               >
                 Get Started Free
@@ -160,7 +160,7 @@ export default function Pricing() {
               </ul>
 
               <Link
-                to="/payment-methods"
+                to={href("/payment-methods")}
                 className="w-full py-3 px-6 text-center bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 text-blue-600 dark:text-blue-400 font-medium border border-white dark:border-gray-700 rounded-lg transition-colors"
               >
                 Upgrade to Pro
@@ -177,19 +177,19 @@ export default function Pricing() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                to="/contact"
+                to={href("/contact")}
                 className="px-5 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium transition-colors"
               >
                 Contact Support
               </Link>
               <Link
-                to="/faq"
+                to={href("/faq")}
                 className="px-5 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium transition-colors"
               >
                 View FAQ
               </Link>
               <Link
-                to="/refund-policy"
+                to={href("/refund-policy")}
                 className="px-5 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium transition-colors"
               >
                 Refund Policy
