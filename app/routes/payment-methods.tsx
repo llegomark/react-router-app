@@ -1,11 +1,56 @@
 import { Link, href } from 'react-router';
-import type { Route } from './+types/payment-methods';
+import type { Route } from './+types/pricing';
+import { product } from "@forge42/seo-tools/structured-data/product";
 
-export const meta: Route.MetaFunction = () => {
+export const meta: Route.MetaFunction = ({ location }) => {
+  const url = location.pathname
+  const domain = "https://nqesh.com"
+  const fullUrl = `${domain}${url}`
+
   return [
     { title: "NQESH Reviewer - Payment Methods" },
     { name: "description", content: "Available payment methods for NQESH Reviewer Pro and how to complete your purchase" },
-  ];
+    { property: "og:title", content: "NQESH Reviewer - Payment Methods" },
+    { property: "og:description", content: "Available payment methods for NQESH Reviewer Pro and how to complete your purchase" },
+    { property: "og:url", content: fullUrl },
+    { property: "og:type", content: "website" },
+    { property: "og:image", content: `${domain}/og-image.jpg` },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: "NQESH Reviewer Payment Methods" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: "@nqeshreviewer" },
+    { name: "twitter:title", content: "NQESH Reviewer - Payment Methods" },
+    { name: "twitter:description", content: "Available payment methods for NQESH Reviewer Pro and how to complete your purchase" },
+    { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
+    { rel: "canonical", href: fullUrl },
+    {
+      "script:ld+json": product({
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "NQESH Reviewer Pro",
+        "description": "Comprehensive preparation platform for the National Qualifying Examination for School Heads in the Philippines. Access all study materials, practice questions, and simulation exams.", // Product Description - more detail
+        "image": "https://nqesh.com/logo.png",
+        "brand": {
+          "@type": "Brand",
+          "name": "NQESH Reviewer"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": 1499.00,
+          "priceCurrency": "PHP",
+          "availability": "https://schema.org/InStock",
+          "priceValidUntil": "2025-12-31",
+          "url": fullUrl
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": 4.8,
+          "reviewCount": "256"
+        }
+      })
+    }
+  ]
 };
 
 export default function PaymentMethods() {

@@ -1,14 +1,51 @@
+import { organization } from "@forge42/seo-tools/structured-data/organization"
 import { useState, useEffect } from 'react';
 import { Link, data, useSubmit, href } from 'react-router';
 import { z } from 'zod';
 import { contactSubmissions } from '~/database/schema';
 import type { Route } from './+types/contact';
 
-export const meta: Route.MetaFunction = () => {
+export const meta: Route.MetaFunction = ({ location }) => {
+  const url = location.pathname
+  const domain = "https://nqesh.com"
+  const fullUrl = `${domain}${url}`
+
   return [
     { title: "NQESH Reviewer - Contact Us" },
-    { name: "description", content: "Contact the NQESH Reviewer team for support, feedback, or inquiries" },
-  ];
+    { name: "description", content: "Contact the NQESH Reviewer team for support, feedback, or inquiries about our exam preparation platform" },
+    { property: "og:title", content: "NQESH Reviewer - Contact Us" },
+    { property: "og:description", content: "Contact the NQESH Reviewer team for support, feedback, or inquiries about our exam preparation platform" },
+    { property: "og:url", content: fullUrl },
+    { property: "og:type", content: "website" },
+    { property: "og:image", content: `${domain}/og-image.jpg` },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: "NQESH Reviewer Contact Us" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: "@nqeshreviewer" },
+    { name: "twitter:title", content: "NQESH Reviewer - Contact Us" },
+    { name: "twitter:description", content: "Contact the NQESH Reviewer team for support, feedback, or inquiries about our exam preparation platform" },
+    { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
+    { rel: "canonical", href: fullUrl },
+    {
+      "script:ld+json": organization({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "url": "https://nqesh.com",
+        "name": "NQESH Reviewer",
+        "description": "Comprehensive preparation platform for the National Qualifying Examination for School Heads",
+        "email": "support@nqesh.com",
+        "telephone": "+63-926-021-1602",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "support@nqesh.com",
+          "telephone": "+63-926-021-1602",
+          "availableLanguage": ["English", "Filipino"]
+        }
+      })
+    }
+  ]
 };
 
 // Define Zod schema for form validation

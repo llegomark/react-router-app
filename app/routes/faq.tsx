@@ -1,13 +1,80 @@
+import { faq } from "@forge42/seo-tools/structured-data/faq"
 import { useState } from 'react';
 import { Link, href } from 'react-router';
 import type { Route } from './+types/faq';
 
-export const meta: Route.MetaFunction = () => {
+export const meta: Route.MetaFunction = ({ location }) => {
+  const url = location.pathname
+  const domain = "https://nqesh.com" // Use your actual domain in production
+  const fullUrl = `${domain}${url}`
+
   return [
     { title: "NQESH Reviewer - Frequently Asked Questions" },
     { name: "description", content: "Find answers to common questions about the NQESH Reviewer platform and the National Qualifying Examination for School Heads" },
-  ];
-};
+    { property: "og:title", content: "NQESH Reviewer - Frequently Asked Questions" },
+    { property: "og:description", content: "Find answers to common questions about the NQESH Reviewer platform and the National Qualifying Examination for School Heads" },
+    { property: "og:url", content: fullUrl },
+    { property: "og:type", content: "website" },
+    { property: "og:image", content: `${domain}/og-image.jpg` },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: "NQESH Reviewer FAQ" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: "@nqeshreviewer" },
+    { name: "twitter:title", content: "NQESH Reviewer - Frequently Asked Questions" },
+    { name: "twitter:description", content: "Find answers to common questions about the NQESH Reviewer platform and the National Qualifying Examination for School Heads" },
+    { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
+    { rel: "canonical", href: fullUrl },
+    {
+      "script:ld+json": faq({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the NQESH?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The National Qualifying Examination for School Heads (NQESH) is an examination administered by the Department of Education (DepEd) in the Philippines. It is designed to assess the competencies of aspiring school leaders who want to become principals or school heads."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Who is eligible to take the NQESH?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "To be eligible to take the NQESH, candidates must be a Filipino citizen, must be a teacher, head teacher, or master teacher with at least 5 years of teaching experience, must have at least a bachelor's degree in elementary or secondary education, must have at least 18 units in management and administration courses, must have a performance rating of at least 'Very Satisfactory' in the last two rating periods, and must have no pending administrative case."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is NQESH Reviewer?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "NQESH Reviewer is a comprehensive online platform designed specifically to help educators prepare for the National Qualifying Examination for School Heads. Our platform offers practice questions covering all NQESH domains, detailed explanations with references, timed practice simulations, performance tracking and analytics, and a mobile-friendly interface for studying anywhere."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What's included in the Pro plan?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Pro plan provides access to ALL categories (1,000+ practice questions), advanced performance analytics, detailed explanations with references for every question, specialized NQESH categories covering all exam domains, full-length simulation exams with time limits, AI-powered study recommendations, and priority email support."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much does the Pro plan cost?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Pro plan costs ₱1,499 as a one-time payment, which gives you access to all Pro features for 12 months from the date of purchase."
+            }
+          }
+        ]
+      })
+    }
+  ]
+};  
 
 interface FaqItem {
   question: string;

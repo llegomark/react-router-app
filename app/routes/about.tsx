@@ -1,12 +1,55 @@
 import { Link, href } from 'react-router';
 import type { Route } from './+types/about';
+import { organization } from "@forge42/seo-tools/structured-data/organization"
 
-export const meta: Route.MetaFunction = () => {
+export const meta: Route.MetaFunction = ({ location }) => {
+  const url = location.pathname
+  const domain = "https://nqesh.com"
+  const fullUrl = `${domain}${url}`
+  
   return [
     { title: "NQESH Reviewer - About Us" },
-    { name: "description", content: "Learn more about the NQESH Reviewer application" },
-  ];
-};
+    { name: "description", content: "Learn more about the NQESH Reviewer application and our mission to help educators prepare for the National Qualifying Examination for School Heads" },
+    { property: "og:title", content: "NQESH Reviewer - About Us" },
+    { property: "og:description", content: "Learn more about the NQESH Reviewer application and our mission to help educators prepare for the National Qualifying Examination for School Heads" },
+    { property: "og:url", content: fullUrl },
+    { property: "og:type", content: "website" },
+    { property: "og:image", content: `${domain}/og-image.jpg` },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: "NQESH Reviewer About Us" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: "@nqeshreviewer" },
+    { name: "twitter:title", content: "NQESH Reviewer - About Us" },
+    { name: "twitter:description", content: "Learn more about the NQESH Reviewer application and our mission to help educators prepare for the National Qualifying Examination for School Heads" },
+    { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
+    { rel: "canonical", href: fullUrl },
+    {
+      "script:ld+json": organization({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "url": "https://nqesh.com",
+        "sameAs": [
+          "https://facebook.com/nqeshreviewer",
+          "https://twitter.com/nqeshreviewer"
+        ],
+        "logo": "https://nqesh.com/logo.png",
+        "name": "NQESH Reviewer",
+        "description": "Comprehensive preparation platform for the National Qualifying Examination for School Heads in the Philippines",
+        "email": "support@nqesh.com",
+        "telephone": "+63-926-021-1602",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "123 Education Street",
+          "addressLocality": "Manila",
+          "addressCountry": "PH",
+          "addressRegion": "Metro Manila",
+          "postalCode": "1000"
+        }
+      })
+    }
+  ]
+}
 
 export default function AboutUs() {
   return (
