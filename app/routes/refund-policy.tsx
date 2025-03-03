@@ -7,9 +7,9 @@ export const meta: Route.MetaFunction = ({ location }) => {
   const fullUrl = `${domain}${url}`
 
   return [
-    { title: "NQESH Reviewer - Refund Policy" },
+    { title: "Refund Policy - NQESH Reviewer" },
     { name: "description", content: "Review the Refund Policy for NQESH Reviewer Pro subscriptions. Learn about eligibility and process for refunds." },
-    { property: "og:title", content: "NQESH Reviewer - Refund Policy" },
+    { property: "og:title", content: "Refund Policy - NQESH Reviewer" },
     { property: "og:description", content: "Review the Refund Policy for NQESH Reviewer Pro subscriptions. Learn about eligibility and process for refunds." },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
@@ -19,7 +19,7 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:image:alt", content: "NQESH Reviewer Refund Policy" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:site", content: "@nqeshreviewer" },
-    { name: "twitter:title", content: "NQESH Reviewer - Refund Policy" },
+    { name: "twitter:title", content: "Refund Policy - NQESH Reviewer" },
     { name: "twitter:description", content: "Review the Refund Policy for NQESH Reviewer Pro subscriptions. Learn about eligibility and process for refunds." },
     { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },

@@ -8,9 +8,9 @@ export const meta: Route.MetaFunction = ({ location }) => {
   const fullUrl = `${domain}${url}`
 
   return [
-    { title: "NQESH Reviewer - DepEd Orders: NQESH Relevant Education Orders" },
+    { title: "DepEd Orders - NQESH Reviewer" },
     { name: "description", content: "Browse a curated dataset of Department of Education Orders relevant for the National Qualifying Examination for School Heads (NQESH). Access official guidelines and policies." },
-    { property: "og:title", content: "NQESH Reviewer - DepEd Orders: NQESH Relevant Education Orders" },
+    { property: "og:title", content: "DepEd Orders - NQESH Reviewer" },
     { property: "og:description", content: "Browse a curated dataset of Department of Education Orders relevant for the National Qualifying Examination for School Heads (NQESH). Access official guidelines and policies." },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
@@ -20,7 +20,7 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:image:alt", content: "NQESH Reviewer DepEd Orders Dataset" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:site", content: "@nqeshreviewer" },
-    { name: "twitter:title", content: "NQESH Reviewer - DepEd Orders: NQESH Relevant Education Orders" },
+    { name: "twitter:title", content: "DepEd Orders - NQESH Reviewer" },
     { name: "twitter:description", content: "Browse a curated dataset of Department of Education Orders relevant for the National Qualifying Examination for School Heads (NQESH). Access official guidelines and policies." },
     { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },

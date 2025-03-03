@@ -7,9 +7,9 @@ export const meta: Route.MetaFunction = ({ location }) => {
   const fullUrl = `${domain}${url}`
 
   return [
-    { title: "NQESH Reviewer - Pricing Plans" },
+    { title: "Pricing Plans - NQESH Reviewer" },
     { name: "description", content: "Choose the right NQESH Reviewer plan for your exam preparation needs. Start free or get comprehensive access with our Pro plan." },
-    { property: "og:title", content: "NQESH Reviewer - Pricing Plans" },
+    { property: "og:title", content: "Pricing Plans - NQESH Reviewer" },
     { property: "og:description", content: "Choose the right NQESH Reviewer plan for your exam preparation needs. Start free or get comprehensive access with our Pro plan." },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
@@ -19,7 +19,7 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:image:alt", content: "NQESH Reviewer Pricing Plans" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:site", content: "@nqeshreviewer" },
-    { name: "twitter:title", content: "NQESH Reviewer - Pricing Plans" },
+    { name: "twitter:title", content: "Pricing Plans - NQESH Reviewer" },
     { name: "twitter:description", content: "Choose the right NQESH Reviewer plan for your exam preparation needs. Start free or get comprehensive access with our Pro plan." },
     { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },

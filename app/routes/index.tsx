@@ -8,9 +8,9 @@ export const meta: Route.MetaFunction = ({ location }) => {
   const fullUrl = `${domain}${url}`
   
   return [
-    { title: "NQESH Reviewer - Prepare for the National Qualifying Examination for School Heads" },
+    { title: "Prepare for the National Qualifying Examination for School Heads (NQESH) - NQESH Reviewer" },
     { name: "description", content: "Comprehensive preparation platform for the National Qualifying Examination for School Heads in the Philippines" },
-    { property: "og:title", content: "NQESH Reviewer - Prepare for the National Qualifying Examination for School Heads" },
+    { property: "og:title", content: "Prepare for the National Qualifying Examination for School Heads (NQESH) - NQESH Reviewer" },
     { property: "og:description", content: "Comprehensive preparation platform for the National Qualifying Examination for School Heads in the Philippines" },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
@@ -20,7 +20,7 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:image:alt", content: "NQESH Reviewer" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:site", content: "@nqeshreviewer" },
-    { name: "twitter:title", content: "NQESH Reviewer - Prepare for the National Qualifying Examination for School Heads" },
+    { name: "twitter:title", content: "Prepare for the National Qualifying Examination for School Heads (NQESH) - NQESH Reviewer" },
     { name: "twitter:description", content: "Comprehensive preparation platform for the National Qualifying Examination for School Heads" },
     { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },

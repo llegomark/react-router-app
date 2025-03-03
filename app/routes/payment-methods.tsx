@@ -8,9 +8,9 @@ export const meta: Route.MetaFunction = ({ location }) => {
   const fullUrl = `${domain}${url}`
 
   return [
-    { title: "NQESH Reviewer - Payment Methods" },
+    { title: "Payment Methods - NQESH Reviewer" },
     { name: "description", content: "Available payment methods for NQESH Reviewer Pro and how to complete your purchase" },
-    { property: "og:title", content: "NQESH Reviewer - Payment Methods" },
+    { property: "og:title", content: "Payment Methods - NQESH Reviewer" },
     { property: "og:description", content: "Available payment methods for NQESH Reviewer Pro and how to complete your purchase" },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
@@ -20,7 +20,7 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:image:alt", content: "NQESH Reviewer Payment Methods" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:site", content: "@nqeshreviewer" },
-    { name: "twitter:title", content: "NQESH Reviewer - Payment Methods" },
+    { name: "twitter:title", content: "Payment Methods - NQESH Reviewer" },
     { name: "twitter:description", content: "Available payment methods for NQESH Reviewer Pro and how to complete your purchase" },
     { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },

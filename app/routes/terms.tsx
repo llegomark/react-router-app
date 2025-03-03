@@ -7,9 +7,9 @@ export const meta: Route.MetaFunction = ({ location }) => {
   const fullUrl = `${domain}${url}`
 
   return [
-    { title: "NQESH Reviewer - Terms of Use" },
+    { title: "" },
     { name: "description", content: "View the Terms of Use for the NQESH Reviewer application. Understand your rights and responsibilities when using our platform." },
-    { property: "og:title", content: "NQESH Reviewer - Terms of Use" },
+    { property: "og:title", content: "Terms of Use - NQESH Reviewer" },
     { property: "og:description", content: "View the Terms of Use for the NQESH Reviewer application. Understand your rights and responsibilities when using our platform." },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
@@ -19,7 +19,7 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:image:alt", content: "NQESH Reviewer Terms of Use" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:site", content: "@nqeshreviewer" },
-    { name: "twitter:title", content: "NQESH Reviewer - Terms of Use" },
+    { name: "twitter:title", content: "Terms of Use - NQESH Reviewer" },
     { name: "twitter:description", content: "View the Terms of Use for the NQESH Reviewer application. Understand your rights and responsibilities when using our platform." },
     { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },

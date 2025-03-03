@@ -7,9 +7,9 @@ export const meta: Route.MetaFunction = ({ location }) => {
   const fullUrl = `${domain}${url}`
 
   return [
-    { title: "NQESH Reviewer - Privacy Policy" },
+    { title: "Privacy Policy - NQESH Reviewer" },
     { name: "description", content: "Read the Privacy Policy for NQESH Reviewer to understand how we protect your personal information and data." },
-    { property: "og:title", content: "NQESH Reviewer - Privacy Policy" },
+    { property: "og:title", content: "Privacy Policy - NQESH Reviewer" },
     { property: "og:description", content: "Read the Privacy Policy for NQESH Reviewer to understand how we protect your personal information and data." },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
@@ -19,7 +19,7 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:image:alt", content: "NQESH Reviewer Privacy Policy" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:site", content: "@nqeshreviewer" },
-    { name: "twitter:title", content: "NQESH Reviewer - Privacy Policy" },
+    { name: "twitter:title", content: "Privacy Policy - NQESH Reviewer" },
     { name: "twitter:description", content: "Read the Privacy Policy for NQESH Reviewer to understand how we protect your personal information and data." },
     { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },

@@ -8,14 +8,14 @@ export const meta: Route.MetaFunction = ({ data, location }) => {
   const domain = "https://nqesh.com"
   const fullUrl = `${domain}${url}`
 
-  let title = "Quiz - Question";
+  let title = "Question - NQESH Reviewer";
   let description = "Answer the quiz question";
 
   if (data?.category) {
-    title = `NQESH Reviewer - ${data.category.name} - Question ${data.currentQuestionNumber}`;
+    title = `${data.category.name} - Question ${data.currentQuestionNumber} - NQESH Reviewer`;
     description = `Answer question ${data.currentQuestionNumber} in the ${data.category.name} category for your NQESH exam preparation.`;
   } else {
-    title = "NQESH Reviewer - Quiz - Error";
+    title = "Error - NQESH Reviewer";
     description = "Error: Question not found for NQESH Reviewer Quiz.";
   }
 

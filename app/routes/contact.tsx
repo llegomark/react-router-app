@@ -11,9 +11,9 @@ export const meta: Route.MetaFunction = ({ location }) => {
   const fullUrl = `${domain}${url}`
 
   return [
-    { title: "NQESH Reviewer - Contact Us" },
+    { title: "Contact Us - NQESH Reviewer" },
     { name: "description", content: "Contact the NQESH Reviewer team for support, feedback, or inquiries about our exam preparation platform" },
-    { property: "og:title", content: "NQESH Reviewer - Contact Us" },
+    { property: "og:title", content: "Contact Us - NQESH Reviewer" },
     { property: "og:description", content: "Contact the NQESH Reviewer team for support, feedback, or inquiries about our exam preparation platform" },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
@@ -23,7 +23,7 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:image:alt", content: "NQESH Reviewer Contact Us" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:site", content: "@nqeshreviewer" },
-    { name: "twitter:title", content: "NQESH Reviewer - Contact Us" },
+    { name: "twitter:title", content: "Contact Us - NQESH Reviewer" },
     { name: "twitter:description", content: "Contact the NQESH Reviewer team for support, feedback, or inquiries about our exam preparation platform" },
     { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },

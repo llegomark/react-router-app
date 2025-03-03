@@ -7,9 +7,9 @@ export const meta: Route.MetaFunction = ({ location }) => {
   const fullUrl = `${domain}${url}`
 
   return [
-    { title: "NQESH Reviewer - 404 Page Not Found" },
+    { title: "404 Page Not Found - NQESH Reviewer" },
     { name: "description", content: "Oops! The page you are looking for could not be found on NQESH Reviewer. Please check the URL or return to the homepage." },
-    { property: "og:title", content: "NQESH Reviewer - 404 Page Not Found" },
+    { property: "og:title", content: "404 Page Not Found - NQESH Reviewer" },
     { property: "og:description", content: "Oops! The page you are looking for could not be found on NQESH Reviewer. Please check the URL or return to the homepage." },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
@@ -19,7 +19,7 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:image:alt", content: "NQESH Reviewer 404 Error Page" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:site", content: "@nqeshreviewer" },
-    { name: "twitter:title", content: "NQESH Reviewer - 404 Page Not Found" },
+    { name: "twitter:title", content: "404 Page Not Found - NQESH Reviewer" },
     { name: "twitter:description", content: "Oops! The page you are looking for could not be found on NQESH Reviewer. Please check the URL or return to the homepage." },
     { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },

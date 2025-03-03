@@ -5,7 +5,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useNavigation,
 } from "react-router";
 
 import Header from "./components/Header";
@@ -46,8 +45,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const navigation = useNavigation();
-  const isGlobalLoading = navigation.state === 'loading' || navigation.state === 'submitting';
 
   return (
     <>

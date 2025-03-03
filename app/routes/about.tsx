@@ -8,9 +8,9 @@ export const meta: Route.MetaFunction = ({ location }) => {
   const fullUrl = `${domain}${url}`
   
   return [
-    { title: "NQESH Reviewer - About Us" },
+    { title: "About Us - NQESH Reviewer" },
     { name: "description", content: "Learn more about the NQESH Reviewer application and our mission to help educators prepare for the National Qualifying Examination for School Heads" },
-    { property: "og:title", content: "NQESH Reviewer - About Us" },
+    { property: "og:title", content: "About Us - NQESH Reviewer" },
     { property: "og:description", content: "Learn more about the NQESH Reviewer application and our mission to help educators prepare for the National Qualifying Examination for School Heads" },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
@@ -20,7 +20,7 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:image:alt", content: "NQESH Reviewer About Us" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:site", content: "@nqeshreviewer" },
-    { name: "twitter:title", content: "NQESH Reviewer - About Us" },
+    { name: "twitter:title", content: "About Us - NQESH Reviewer" },
     { name: "twitter:description", content: "Learn more about the NQESH Reviewer application and our mission to help educators prepare for the National Qualifying Examination for School Heads" },
     { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },

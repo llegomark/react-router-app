@@ -11,9 +11,9 @@ export const meta: Route.MetaFunction = ({ location }) => {
   const fullUrl = `${domain}${url}`
 
   return [
-    { title: "NQESH Reviewer - Categories" },
+    { title: "Categories - NQESH Reviewer" },
     { name: "description", content: "Select a quiz category to start your NQESH review and improve your chances of passing the National Qualifying Examination for School Heads" },
-    { property: "og:title", content: "NQESH Reviewer - Categories" },
+    { property: "og:title", content: "Categories - NQESH Reviewer" },
     { property: "og:description", content: "Select a quiz category to start your NQESH review and improve your chances of passing the National Qualifying Examination for School Heads" },
     { property: "og:url", content: fullUrl },
     { property: "og:type", content: "website" },
@@ -23,7 +23,7 @@ export const meta: Route.MetaFunction = ({ location }) => {
     { property: "og:image:alt", content: "NQESH Reviewer Categories" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:site", content: "@nqeshreviewer" },
-    { name: "twitter:title", content: "NQESH Reviewer - Categories" },
+    { name: "twitter:title", content: "Categories - NQESH Reviewer" },
     { name: "twitter:description", content: "Select a quiz category to start your NQESH review and improve your chances of passing the National Qualifying Examination for School Heads" },
     { name: "twitter:image", content: `${domain}/twitter-image.jpg` },
     { rel: "canonical", href: fullUrl },
@@ -113,7 +113,7 @@ export default function Reviewer({ loaderData }: Route.ComponentProps) {
       };
 
       if (redirectReason === 'verification_required') {
-        setRedirectMessage("Please complete the verification below to access the quiz questions");
+        setRedirectMessage("Please complete the verification below to access the NQESH review questions");
         if (returnPath) {
           setReturnPath(returnPath);
         }
@@ -285,7 +285,7 @@ export default function Reviewer({ loaderData }: Route.ComponentProps) {
               <div className="flex justify-center">
                 <Turnstile
                   ref={turnstileRef}
-                  siteKey="1x00000000000000000000AA" // For testing: Always passes
+                  siteKey="0x4AAAAAAA9N-qK7MRnEFcE8"
                   onSuccess={handleTurnstileSuccess}
                   onError={handleTurnstileError}
                   onExpire={handleTurnstileExpire}
