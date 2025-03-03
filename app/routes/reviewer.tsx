@@ -128,18 +128,29 @@ export default function Reviewer({ loaderData }: Route.ComponentProps) {
       return;
     }
 
-    const token = localStorage.getItem('turnstile_verified');
-    if (token) {
-      // If there's a token in localStorage, consider the user verified
-      // This is just for testing - in production you'd want a more secure approach
-      setIsTurnstileVerified(true);
-    }
+    checkVerificationStatus();
   }, [redirectMessage]);
 
+  // Simple verification check using a secure cookie
+  const checkVerificationStatus = () => {
+    try {
+      // Check if cookie exists
+      const verified = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('turnstile_verified='))
+        ?.split('=')[1];
+
+      setIsTurnstileVerified(verified === 'true');
+    } catch (error) {
+      console.error("Error checking verification status:", error);
+      setIsTurnstileVerified(false);
+    }
+  };
+
+  // Simple and secure Turnstile handler using cookies
   const handleTurnstileSuccess = async (token: string) => {
     try {
       setIsVerifying(true);
-      console.log("Turnstile widget provided token:", token.substring(0, 10) + "...");
 
       // Send the token to our Worker API endpoint for verification
       const response = await fetch('/api/verify-turnstile', {
@@ -151,29 +162,24 @@ export default function Reviewer({ loaderData }: Route.ComponentProps) {
       });
 
       const outcome = await response.json() as TurnstileVerificationResponse;
-      console.log("Server verification response:", outcome);
 
       if (outcome.success) {
-        console.log("Turnstile verification successful");
+        // Set a secure cookie instead of localStorage
+        document.cookie = `turnstile_verified=true; path=/; max-age=3600; secure; samesite=strict`;
+
         setIsTurnstileVerified(true);
         setTurnstileError(null);
-
-        // For testing only - store verification in localStorage
-        // In production, use a more secure approach like cookies with HttpOnly flag
-        localStorage.setItem('turnstile_verified', 'true');
 
         // If we were redirected here and have a return path, navigate back after verification
         if (returnPath) {
           window.location.href = returnPath;
         }
       } else {
-        console.error("Verification failed:", outcome["error-codes"]);
         const errorMsg = outcome["error-codes"]?.join(", ") || "Unknown error";
         setTurnstileError(`Verification failed: ${errorMsg}`);
         turnstileRef.current?.reset();
       }
     } catch (error) {
-      console.error("Error verifying Turnstile token:", error);
       setTurnstileError("Verification error. Please try again.");
       turnstileRef.current?.reset();
     } finally {

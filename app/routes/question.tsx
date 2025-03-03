@@ -160,14 +160,18 @@ export default function Question({ loaderData }: Route.ComponentProps) {
     // Check verification status
     const checkVerification = () => {
       try {
-        const verificationData = localStorage.getItem('turnstile_verified');
-        
-        if (!verificationData) {
+        // Check if cookie exists instead of localStorage
+        const verified = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('turnstile_verified='))
+          ?.split('=')[1];
+
+        if (verified !== 'true') {
           setIsVerified(false);
           setIsLoading(false);
           return;
         }
-        
+
         setIsVerified(true);
         setIsLoading(false);
       } catch (error) {
@@ -176,7 +180,7 @@ export default function Question({ loaderData }: Route.ComponentProps) {
         setIsLoading(false);
       }
     };
-    
+
     checkVerification();
   }, []);
 
@@ -184,8 +188,8 @@ export default function Question({ loaderData }: Route.ComponentProps) {
   useEffect(() => {
     if (isVerified === false && !isLoading) {
       // Redirect to reviewer page
-      navigate('/reviewer', { 
-        state: { 
+      navigate('/reviewer', {
+        state: {
           redirectReason: 'verification_required',
           returnPath: window.location.pathname
         }
@@ -321,12 +325,12 @@ export default function Question({ loaderData }: Route.ComponentProps) {
                   onClick={() => handleAnswerSelect(index)}
                   disabled={hasAnswered || timeRemaining === 0}
                   className={`w-full text-left p-4 rounded-lg border transition-colors cursor-pointer ${hasAnswered
-                      ? index === question.correctAnswer
-                        ? 'bg-green-50 dark:bg-green-950 border-green-500 text-green-900 dark:text-green-300'
-                        : index === selectedAnswer
-                          ? 'bg-red-50 dark:bg-red-950 border-red-500 text-red-900 dark:text-red-300'
-                          : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300'
-                      : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+                    ? index === question.correctAnswer
+                      ? 'bg-green-50 dark:bg-green-950 border-green-500 text-green-900 dark:text-green-300'
+                      : index === selectedAnswer
+                        ? 'bg-red-50 dark:bg-red-950 border-red-500 text-red-900 dark:text-red-300'
+                        : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300'
+                    : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
                     }`}
                 >
                   {option}

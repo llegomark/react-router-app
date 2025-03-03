@@ -4,6 +4,7 @@ import { Link, data, useSubmit, href } from 'react-router';
 import { z } from 'zod';
 import { contactSubmissions } from '~/database/schema';
 import type { Route } from './+types/contact';
+import { safeString, safeEmail, safePhoneNumber, XSS_ERROR_MESSAGE } from '../utils/validation';
 
 export const meta: Route.MetaFunction = ({ location }) => {
   const url = location.pathname
@@ -48,12 +49,12 @@ export const meta: Route.MetaFunction = ({ location }) => {
   ]
 };
 
-// Define Zod schema for form validation
+// Updated contact form schema with XSS protection
 const contactFormSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  mobileNumber: z.string().optional(),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  name: safeString({ minLength: 2, errorMessage: XSS_ERROR_MESSAGE }),
+  email: safeEmail(),
+  mobileNumber: z.string().optional().pipe(safePhoneNumber()),
+  message: safeString({ minLength: 10, errorMessage: XSS_ERROR_MESSAGE }),
   privacyPolicy: z.boolean().refine(val => val === true, {
     message: "You must agree to the Privacy Policy"
   }),
@@ -79,9 +80,9 @@ export async function action({ request, context }: Route.ActionArgs) {
       privacyPolicy: formData.get('privacyPolicy') !== null,
     };
 
-    // Validate form data
+    // Validate form data with enhanced XSS protection
     const validationResult = contactFormSchema.safeParse(formValues);
-    
+
     if (!validationResult.success) {
       console.error("Form validation failed:", validationResult.error.format());
       return data({
@@ -108,7 +109,7 @@ export async function action({ request, context }: Route.ActionArgs) {
     } catch (dbError) {
       console.error("Database error:", dbError);
       return data({
-        success: false, 
+        success: false,
         error: "Failed to save your message. Please try again later."
       } as ContactActionData, { status: 500 });
     }
@@ -134,7 +135,7 @@ export default function Contact({ actionData }: Route.ComponentProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
-  
+
   // Update server error when actionData changes
   useEffect(() => {
     if (actionData && !actionData.success && actionData.error) {
@@ -149,7 +150,7 @@ export default function Contact({ actionData }: Route.ComponentProps) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
-    
+
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
@@ -173,7 +174,7 @@ export default function Contact({ actionData }: Route.ComponentProps) {
     try {
       // Validate form data with Zod
       const result = contactFormSchema.safeParse(formData);
-      
+
       if (!result.success) {
         // Format and set errors
         const formattedErrors: Record<string, string> = {};
@@ -182,7 +183,7 @@ export default function Contact({ actionData }: Route.ComponentProps) {
             formattedErrors[err.path[0].toString()] = err.message;
           }
         });
-        
+
         setErrors(formattedErrors);
         setIsSubmitting(false);
         return;
@@ -228,11 +229,11 @@ export default function Contact({ actionData }: Route.ComponentProps) {
 
             {formSubmitted ? (
               <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg p-6 my-8 text-center">
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className="h-12 w-12 mx-auto mb-4 text-green-500 dark:text-green-400" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-12 w-12 mx-auto mb-4 text-green-500 dark:text-green-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -262,7 +263,7 @@ export default function Contact({ actionData }: Route.ComponentProps) {
                     {serverError}
                   </div>
                 )}
-              
+
                 <div>
                   <label htmlFor="name" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
                     Name<span className="text-red-600">*</span>
@@ -273,11 +274,10 @@ export default function Contact({ actionData }: Route.ComponentProps) {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className={`w-full p-3 border rounded-lg focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${
-                      errors.name 
-                        ? 'border-red-500 dark:border-red-700 focus:ring-red-500 focus:border-red-500' 
+                    className={`w-full p-3 border rounded-lg focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${errors.name
+                        ? 'border-red-500 dark:border-red-700 focus:ring-red-500 focus:border-red-500'
                         : 'border-gray-300 dark:border-gray-700'
-                    }`}
+                      }`}
                     placeholder="Mark Anthony Llego"
                     required
                   />
@@ -296,11 +296,10 @@ export default function Contact({ actionData }: Route.ComponentProps) {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`w-full p-3 border rounded-lg focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${
-                      errors.email 
-                        ? 'border-red-500 dark:border-red-700 focus:ring-red-500 focus:border-red-500' 
+                    className={`w-full p-3 border rounded-lg focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${errors.email
+                        ? 'border-red-500 dark:border-red-700 focus:ring-red-500 focus:border-red-500'
                         : 'border-gray-300 dark:border-gray-700'
-                    }`}
+                      }`}
                     placeholder="markllego@gmail.com"
                     required
                   />
@@ -319,9 +318,15 @@ export default function Contact({ actionData }: Route.ComponentProps) {
                     name="mobileNumber"
                     value={formData.mobileNumber}
                     onChange={handleInputChange}
-                    className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                    className={`w-full p-3 border rounded-lg focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${errors.mobileNumber
+                        ? 'border-red-500 dark:border-red-700 focus:ring-red-500 focus:border-red-500'
+                        : 'border-gray-300 dark:border-gray-700'
+                      }`}
                     placeholder="09260211602"
                   />
+                  {errors.mobileNumber && (
+                    <p className="mt-1 text-red-600 dark:text-red-400 text-sm">{errors.mobileNumber}</p>
+                  )}
                 </div>
 
                 <div>
@@ -334,11 +339,10 @@ export default function Contact({ actionData }: Route.ComponentProps) {
                     value={formData.message}
                     onChange={handleInputChange}
                     rows={5}
-                    className={`w-full p-3 border rounded-lg focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${
-                      errors.message 
-                        ? 'border-red-500 dark:border-red-700 focus:ring-red-500 focus:border-red-500' 
+                    className={`w-full p-3 border rounded-lg focus:ring-3 focus:ring-blue-500 focus:border-blue-500 outline-hidden dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${errors.message
+                        ? 'border-red-500 dark:border-red-700 focus:ring-red-500 focus:border-red-500'
                         : 'border-gray-300 dark:border-gray-700'
-                    }`}
+                      }`}
                     placeholder="Please provide details about your inquiry or feedback"
                     required
                   />
@@ -355,11 +359,10 @@ export default function Contact({ actionData }: Route.ComponentProps) {
                       type="checkbox"
                       checked={formData.privacyPolicy === true}
                       onChange={handleInputChange}
-                      className={`w-4 h-4 border rounded focus:ring-3 focus:ring-blue-500 cursor-pointer ${
-                        errors.privacyPolicy 
-                          ? 'border-red-500 dark:border-red-700 text-red-600 focus:ring-red-500' 
+                      className={`w-4 h-4 border rounded focus:ring-3 focus:ring-blue-500 cursor-pointer ${errors.privacyPolicy
+                          ? 'border-red-500 dark:border-red-700 text-red-600 focus:ring-red-500'
                           : 'border-gray-300 dark:border-gray-700 text-blue-600'
-                      }`}
+                        }`}
                       required
                     />
                   </div>

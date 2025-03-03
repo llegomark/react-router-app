@@ -243,7 +243,7 @@ export default {
         
         // Get the Cloudflare Turnstile secret key
         // This is the demo secret key that will always pass verification for testing
-        const SECRET_KEY = env.TURNSTILE_SECRET_KEY || "1x0000000000000000000000000000000AA";
+        const SECRET_KEY = env.TURNSTILE_SECRET_KEY;
         
         if (!SECRET_KEY) {
           console.error('Missing TURNSTILE_SECRET_KEY environment variable');
@@ -255,6 +255,9 @@ export default {
             headers: { 
               'Content-Type': 'application/json',
               'Access-Control-Allow-Origin': '*' 
+              // 'Access-Control-Allow-Origin': 'https://nqesh.com',
+              // 'Access-Control-Allow-Methods': 'POST, OPTIONS',
+              // 'Access-Control-Allow-Headers': 'Content-Type'
             }
           });
         }
