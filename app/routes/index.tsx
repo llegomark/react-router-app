@@ -3,7 +3,6 @@ import { Link, href } from 'react-router';
 import { organization } from "@forge42/seo-tools/structured-data/organization";
 import type { Route } from './+types/index';
 
-// Define question interface for type safety
 interface QuizQuestion {
   question: string;
   options: string[];
@@ -11,7 +10,6 @@ interface QuizQuestion {
   explanation: string;
 }
 
-// Sample question for the showcase
 const sampleQuestions: QuizQuestion[] = [
   {
     question: "You are a newly appointed school head in a school with a history of low academic performance. Initial data suggests poor teacher morale and a lack of clear direction. Which leadership approach would be MOST effective in initiating positive change?",
