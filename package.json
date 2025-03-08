@@ -15,29 +15,29 @@
   "dependencies": {
     "@forge42/seo-tools": "^1.3.0",
     "@marsidev/react-turnstile": "^1.1.0",
-    "@react-router/node": "^7.2.0",
-    "@react-router/serve": "^7.2.0",
+    "@react-router/node": "^7.3.0",
+    "@react-router/serve": "^7.3.0",
     "drizzle-orm": "~0.40.0",
     "isbot": "^5.1.23",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router": "^7.2.0",
+    "react-router": "^7.3.0",
     "zod": "^3.24.2",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250224.0",
-    "@react-router/dev": "^7.2.0",
-    "@tailwindcss/vite": "^4.0.9",
-    "@types/node": "^22.13.8",
+    "@cloudflare/workers-types": "^4.20250303.0",
+    "@react-router/dev": "^7.3.0",
+    "@tailwindcss/vite": "^4.0.12",
+    "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "dotenv-cli": "^8.0.0",
     "drizzle-kit": "~0.30.5",
-    "tailwindcss": "^4.0.9",
+    "tailwindcss": "^4.0.12",
     "typescript": "^5.8.2",
-    "vite": "^6.2.0",
+    "vite": "^6.2.1",
     "vite-tsconfig-paths": "^5.1.4",
-    "wrangler": "^3.111.0"
+    "wrangler": "^3.114.0"
   }
 }
